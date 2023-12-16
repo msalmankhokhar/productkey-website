@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Keeyz.site</title>
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="/static/css/comman2.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+
+<!-- <div class="container">
+  </div> -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+  /* background: #f4f5;
+  padding: 0 20px; */
+}
+
+::selection{
+  color: #fff;
+  background: #664AFF;
+}
+
+.container{
+  max-width: 450px;
+  margin: 10px auto;
+}
+
+.container .searchInput{
+  background: #fff;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+
+.searchInput input{
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+}
+
+.searchInput.active input{
+  border-radius: 5px 5px 0 0;
+}
+
+.searchInput .resultBox{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+
+.searchInput.active .resultBox{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resultBox li{
+  list-style: none;
+  padding: 8px 12px;
+  display: none;
+  width: 100%;
+  cursor: default;
+  border-radius: 3px;
+}
+
+.searchInput.active .resultBox li{
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+}
+.resultBox li:hover{
+  background: #efefef;
+}
+
+.searchInput .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+}
+</style>
+
+{% block css %}{% endblock css %}
+<body>
+<div class="container" id="container">
+
+  
+  <div id="header" class="p-2">
+    <h1 class="text-center">Keeys.site</h1>
+    <p class="text-center">Online Product keys Archive</p>
+  </div>
+  <div id="contentWrapper">
+      {% block main %}
+        <p class="sideItem"><strong>Keeyz.site</strong> is provides you the genuine activation keys of popular paid softwares. We have an ever growing database. Search now what you are looking for</p>
+        <div id="formWrapper" class="sideItem">
+            <label class="" for="searchInput">Search for any software eg; MS Office, Adobe PhotoShop etc.</label>
+
+            <div class="searchInput">
+                <input type="text" placeholder="Search">
+                <div class="resultBox">
+                    <!-- here list are inserted from javascript -->
+                </div>
+                <div class="icon"><i class="fas fa-search"></i></div>
+            </div>
+
+            <!-- <div class="inputWrapper my-3">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" id="searchInput" placeholder="Search for softwares">
+            </div>
+            <div id="suggestionsContainer">
+            </div> -->
+
+            <button id="continueBtn" class="mybtn" style="cursor: pointer;">Continue</button>
+        </div>
+        {% endblock main %}
+    </div>
+    
+</div>
+</body>
+
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
+<!-- <script>
+    AOS.init();
+    let sw_names = {{sw_names | safe}};
+    let suggestionsContainer = document.getElementById("suggestionsContainer");
+
+    function showSugg(name){
+        let elem = document.createElement('div');
+        elem.setAttribute("class", "sugg");
+        elem.innerText = name;
+        suggestionsContainer.append(elem);
+    }
+    document.getElementById("searchInput").addEventListener("change", (e)=>{
+        sw_names.forEach(name => {
+            if (name.includes(e.target.value)){
+                // console.log(name);
+                showSugg(name);
+            }
+        });
+    })
+
+</script> -->
+
+{% block js %}
+<script>
+//     let suggestions = [
+//     "Channel",
+//     "CodingLab",
+//     "CodingNepal",
+//     "YouTube",
+//     "YouTuber",
+//     "YouTube Channel",
+//     "Blogger",
+//     "Bollywood",
+//     "Vlogger",
+//     "Vechiles",
+//     "Facebook",
+//     "Freelancer",
+//     "Facebook Page",
+//     "Designer",
+//     "Developer",
+//     "Web Designer",
+//     "Web Developer",
+//     "Login Form in HTML & CSS",
+//     "How to learn HTML & CSS",
+//     "How to learn JavaScript",
+//     "How to became Freelancer",
+//     "How to became Web Designer",
+//     "How to start Gaming Channel",
+//     "How to start YouTube Channel",
+//     "What does HTML stands for?",
+//     "What does CSS stands for?",
+// ];
+
+let suggestions = {{sw_names | safe}};
+let id_dict = {{id_dict | safe}};
+
+// getting all required elements
+const searchInput = document.querySelector(".searchInput");
+const input = searchInput.querySelector("input");
+const resultBox = searchInput.querySelector(".resultBox");
+const icon = searchInput.querySelector(".icon");
+let linkTag = searchInput.querySelector("a");
+let webLink;
+let continueBtn = document.getElementById("continueBtn")
+continueBtn.addEventListener("click", (e)=>{
+  let name = input.value;
+  if (suggestions.includes(name)){
+    // window.alert("Went in if .. continueBtn eventListner")
+    let link = `/item/${id_dict[name][0]}`;
+    window.location.pathname = link;
+  }
+})
+
+// let lis =  document.querySelectorAll(".searchInput.active .resultBox li");
+// lis.forEach(li => {
+//   li.addEventListener("click", (e)=>{
+//     input.value = li.innerHTML;
+//   })
+// });
+
+// if user press any key and release
+input.onkeyup = (e)=>{
+    let userData = e.target.value; //user enetered data
+    let emptyArray = [];
+    if(userData){
+        emptyArray = suggestions.filter((data)=>{
+            //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
+        });
+        emptyArray = emptyArray.map((data)=>{
+            // passing return data inside li tag
+            return data = `<li class="sugg-li"><img src="${id_dict[data][1]}" alt=""><span>${data}</span></li>`;
+        });
+        searchInput.classList.add("active"); //show autocomplete box
+        // let allList = resultBox.querySelectorAll("li");
+        // for (let i = 0; i < allList.length; i++) {
+        //   //adding onclick attribute in all li tag
+        //   allList[i].setAttribute("class", "sugg-li");
+        // }
+        console.log("inside big func");
+        showSuggestions(emptyArray);
+    }else{
+        searchInput.classList.remove("active"); //hide autocomplete box
+    }
+}
+
+function showSuggestions(list){
+    let listData;
+    console.log("inside small func");
+    if(!list.length){
+        userValue = input.value;
+        listData = '<li class="sugg-li">'+ userValue +'</li>';
+    }else{
+        listData = list.join('');
+    }
+    resultBox.innerHTML = listData;
+    document.querySelectorAll("span").forEach(li => {
+          li.addEventListener("click", (e)=>{
+            e.preventDefault();
+            console.log("inside li event listener");
+            input.value = li.innerHTML;
+            searchInput.classList.remove("active");
+          })
+        });
+}
+</script>
+{% endblock js %}
+
+<!-- <script src="/static/js/script.js"></script> -->
+
+</html>

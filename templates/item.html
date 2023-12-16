@@ -1,0 +1,31 @@
+{% extends "home.html" %}
+
+
+{% block css %}
+<style>
+#main{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 20px 20px;
+}
+#itemThumbnail{
+    width: 100px;
+}
+p{
+    font-size: 0.85rem;
+    color: #545454;
+}
+</style>
+{% endblock css %}
+{% block main %}
+<div id="main">
+    <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
+    <p>{{sw.desc}}</p>
+    <button class="mybtn">Generate key</button>
+</div>
+
+{% endblock main %}
+
+{% block js %}{% endblock js %}

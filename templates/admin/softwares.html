@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}All Softwares{% endblock title %} | Admin Dashboard Keys.site</title>
+<meta name="description" content="All movies list - Admin Dashboard for Influx Global">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito&family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/comman.css">
+{% block bs %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+{% endblock bs %}
+<link rel="stylesheet" href="/static/css/admin/style.css">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+</head>
+{% block css %}{% endblock css %}
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="myalert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">X</span>
+        <p>{{ message | safe }}</p>
+        {% if category == 'idVerifyWarning' %}
+        <a href="/verify-user-identity" class="btn btnNormal btnWithIcon">
+            <i class="up-right-from-square"></i>
+            <span>Verify Now</span>            
+        </a>
+        {% endif %}
+        
+    </div>
+    {% endfor %}
+  {% endif %}
+    {% endwith %}
+
+    <div id="topBar">
+        <a href="/admin" id="logoLink" class="textCenter">Keys.site <span>Admin Dashboard</span></a>
+        <button id="menuBtn" class="btn btn-primary">
+            <i class="fa-solid fa-bars"></i>
+            <!-- <span>Menu</span> -->
+        </button>
+    </div>
+    <nav id="nav">
+        <a href="/admin" id="logoLink" class="textCenter">Menu</a>
+        <div id="navlinksContainer">
+
+            <a href="/admin/all_softwares" class="navlink navlinkWithIcon">
+                <i class="fa-solid fa-film"></i>
+                <span>Softwares</span>
+            </a>
+            
+            <a id="logoutBtn" href="/admin/logout" class="btn btn-danger btnWithIcon">
+                <i class="fa-solid fa-power-off"></i>
+                <span>Log Out</span>
+            </a>
+        </div>
+    </nav>
+
+    <main id="main" class="container py-3">
+        {% block main %}
+        <h1 class="my-1 text-center">All Softwares</h1>
+        <a href="/admin/add_new_software" class="btn btn-success my-3">Add New Software</a>
+        <div class="tableWrapper">
+            <table id="moviesTable" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Key</th>
+                        <th scope="col">Tags</th>
+                        <th scope="col">Thumbnail</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sw in softwaresList %}
+                    <tr>
+                        <td>{{ softwaresList.index(sw) + 1 }}</td>
+                        <td>{{sw.id}}</td>
+                        <td>{{sw.name}}</td>
+                        <td>{{sw.key}}</td>
+                        <td>{{sw.tags}}</td>
+                        <td><img src="{{sw.imgSrc}}" alt="Thumbnail" style="width: 100px;"></td>
+                        <td>
+                            <a href="/admin/edit_software/{{sw.id}}" class="btn btn-info">Edit</a>
+                            <a href="/admin/delete_software/{{sw.id}}" class="btn btn-danger movieDelBtn">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+          {% endblock main %}
+    </main>
+</body>
+
+<script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/script.js"></script>
+{% block js %}
+<script>
+    let movieDelBtnList = document.querySelectorAll(".movieDelBtn");
+
+    movieDelBtnList.forEach(delBtn => {
+        delBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+            let confirmation = window.confirm(`Are you sure to delete this software ?`);
+            if(confirmation){
+                window.location.href = e.target.href;
+            }
+        })
+    });
+</script>
+{% endblock js %}
+<script>
+    let navlinkSpanList = document.querySelectorAll(".navlink.navlinkWithIcon span");
+        let currentNavlinkSpanText = "{{currentNavlinkSpanText}}";
+
+        document.body.onload = function () {
+            console.log("onload func runing")
+            navlinkSpanList.forEach(span => {
+                if (span.innerText == currentNavlinkSpanText) {
+                    span.parentElement.classList.add("selected");
+                }
+            });
+        }
+</script>
+</html>
