@@ -44,6 +44,29 @@ def favicon():
 def under_maintenance(e):
     return render_template('503.html'), 503
 
+@app.route("/api/total_data", methods=["GET"])
+def api_totalData():
+    Software_List = Softwares.query.all()
+    data_json = [ 
+        { 
+            software.name : { "id" : software.id, "image-link" : software.imgSrc, "description" : software.desc, "product-key" : software.key }
+        } 
+        for software in Software_List 
+        ]
+    return data_json
+
+@app.route("/api/suggestions", methods=["GET"])
+def api_sugg():
+    Software_List = Softwares.query.all()
+    data_json = [ sw.name for sw in Software_List]
+    return data_json
+
+@app.route("/product_key/<string:id>", methods=["GET"])
+def return_key(id):
+    sw = Softwares.query.filter_by(id=id).first()
+    data_json = { "key" : sw.key }
+    return data_json
+
 @app.route("/", methods=["GET"])
 def home():
     softwares = Softwares.query.all()
@@ -59,7 +82,15 @@ def item(id):
     if selected_software:
         return render_template("item.html", sw=selected_software)
     else:
-        return "this software does not exist in our database"
+        return "This software does not exist in our database"
+    
+@app.route("/get_key/<string:id>", methods=["GET"])
+def getKey(id):
+    selected_software = Softwares.query.filter_by(id=id).first()
+    if selected_software:
+        return render_template("getkey.html", sw=selected_software)
+    else:
+        return "This software does not exist in our database"
 
 @app.route("/admin", methods=["GET"])
 def admin():

@@ -13,7 +13,7 @@
 #itemThumbnail{
     width: 100px;
 }
-p{
+#desc{
     font-size: 0.85rem;
     color: #545454;
 }
@@ -22,8 +22,8 @@ p{
 {% block main %}
 <div id="main">
     <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
-    <p>{{sw.desc}}</p>
-    <button class="mybtn">Generate key</button>
+    <p id="desc">{{sw.desc}}</p>
+    <a class="mybtn" href="/get_key/{{sw.id}}">Get license key</a>
 </div>
 
 {% endblock main %}

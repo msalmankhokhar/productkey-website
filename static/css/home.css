@@ -1,5 +1,6 @@
 :root{
-    --main-color: #005392;
+    /* --main-color: #005392; */
+    --main-color: #5f0092;
 }
 body{
     background-color: rgb(205, 202, 202);
@@ -9,12 +10,14 @@ body{
 #header{
     color: white;
     background-color: var(--main-color);
+    border-radius: 10px 10px 0px 0px;
 }
 #contentWrapper{
     background-color: white;
     /* display: flex;
     flex-wrap: wrap; */
-    min-height: 70vh;
+    min-height: 76vh;
+    border-radius: 0px 0px 10px 10px;
 }
 #contentWrapper p{
     align-self: center;
