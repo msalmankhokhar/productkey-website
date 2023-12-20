@@ -47,7 +47,7 @@
     box-shadow: 1px 1px 6px gray;
     padding: 15px;
     border-radius: 5px;
-    font-weight: bold;
+    /* font-weight: bold; */
     color: #5a5a5a;
 }
 #spinner{
@@ -188,6 +188,7 @@
                     return resp.json().then((respText)=>{
                         clearInterval(suffleKeyInterval);
                         showFinalKey(respText["key"]);
+                        pBar.parentElement.style.display = "none";
                     })
                 })
         }, 5000);

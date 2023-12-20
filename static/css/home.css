@@ -2,6 +2,9 @@
     /* --main-color: #005392; */
     --main-color: #5f0092;
 }
+p{
+    margin: 0px;
+}
 body{
     background-color: rgb(205, 202, 202);
 }
@@ -11,13 +14,19 @@ body{
     color: white;
     background-color: var(--main-color);
     border-radius: 10px 10px 0px 0px;
+    padding: 20px;
 }
 #contentWrapper{
-    background-color: white;
+    background-color: #ffffffd9;
+    backdrop-filter: blur(20px);
     /* display: flex;
     flex-wrap: wrap; */
     min-height: 76vh;
     border-radius: 0px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
 }
 #contentWrapper p{
     align-self: center;
