@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, session, redirect, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_mail import Mail, Message
-from random import randint, choices
+from flask_cors import CORS
+from random import randint
 import json
 import os
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = 'salmankhokhar'
 
 # files upload configration
@@ -44,22 +45,28 @@ def favicon():
 def under_maintenance(e):
     return render_template('503.html'), 503
 
-@app.route("/api/total_data", methods=["GET"])
+@app.route("/api/id_dict", methods=["GET"])
 def api_totalData():
-    Software_List = Softwares.query.all()
-    data_json = [ 
-        { 
-            software.name : { "id" : software.id, "image-link" : software.imgSrc, "description" : software.desc, "product-key" : software.key }
-        } 
-        for software in Software_List 
-        ]
-    return data_json
+    softwares = Softwares.query.all()
+    id_dict = json.dumps({ sw.name : [sw.id, sw.imgSrc] for sw in softwares })
+    return id_dict
+
+@app.route("/api/getSoftwareInfo/<string:sw_id>", methods=["GET"])
+def getSoftwareInfo(sw_id):
+    software = Softwares.query.filter_by(id=sw_id).first()
+    response = {
+        "id" : software.id,
+        "name" : software.name,
+        "desc" : software.desc,
+        "imgSrc" : software.imgSrc
+    }
+    return response
 
 @app.route("/api/suggestions", methods=["GET"])
 def api_sugg():
-    Software_List = Softwares.query.all()
-    data_json = [ sw.name for sw in Software_List]
-    return data_json
+    softwares = Softwares.query.all()
+    sw_names = json.dumps([ sw.name for sw in softwares])
+    return sw_names
 
 @app.route("/product_key/<string:id>", methods=["GET"])
 def return_key(id):

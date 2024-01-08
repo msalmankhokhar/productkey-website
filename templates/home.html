@@ -187,34 +187,6 @@ body{
 
 {% block js %}
 <script>
-//     let suggestions = [
-//     "Channel",
-//     "CodingLab",
-//     "CodingNepal",
-//     "YouTube",
-//     "YouTuber",
-//     "YouTube Channel",
-//     "Blogger",
-//     "Bollywood",
-//     "Vlogger",
-//     "Vechiles",
-//     "Facebook",
-//     "Freelancer",
-//     "Facebook Page",
-//     "Designer",
-//     "Developer",
-//     "Web Designer",
-//     "Web Developer",
-//     "Login Form in HTML & CSS",
-//     "How to learn HTML & CSS",
-//     "How to learn JavaScript",
-//     "How to became Freelancer",
-//     "How to became Web Designer",
-//     "How to start Gaming Channel",
-//     "How to start YouTube Channel",
-//     "What does HTML stands for?",
-//     "What does CSS stands for?",
-// ];
 
 let suggestions = {{sw_names | safe}};
 let id_dict = {{id_dict | safe}};
@@ -230,18 +202,10 @@ let continueBtn = document.getElementById("continueBtn")
 continueBtn.addEventListener("click", (e)=>{
   let name = input.value;
   if (suggestions.includes(name)){
-    // window.alert("Went in if .. continueBtn eventListner")
     let link = `/item/${id_dict[name][0]}`;
     window.location.pathname = link;
   }
 })
-
-// let lis =  document.querySelectorAll(".searchInput.active .resultBox li");
-// lis.forEach(li => {
-//   li.addEventListener("click", (e)=>{
-//     input.value = li.innerHTML;
-//   })
-// });
 
 // if user press any key and release
 input.onkeyup = (e)=>{
@@ -257,11 +221,6 @@ input.onkeyup = (e)=>{
             return data = `<li class="sugg-li"><img src="${id_dict[data][1]}" alt=""><span>${data}</span></li>`;
         });
         searchInput.classList.add("active"); //show autocomplete box
-        // let allList = resultBox.querySelectorAll("li");
-        // for (let i = 0; i < allList.length; i++) {
-        //   //adding onclick attribute in all li tag
-        //   allList[i].setAttribute("class", "sugg-li");
-        // }
         console.log("inside big func");
         showSuggestions(emptyArray);
     }else{

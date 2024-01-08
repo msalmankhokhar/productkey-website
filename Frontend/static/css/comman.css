@@ -1,0 +1,214 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Nunito', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+
+/* Some Utility classes */
+.textCenter{
+    text-align: center;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+a.btn{
+    text-decoration: none;
+}
+
+a.navlink{
+    text-decoration: none;
+}
+
+.btn, .navlink{
+    font-size: 0.85rem;
+}
+
+.btn{
+    background: none;
+    border: none;
+    padding: 13px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btnWithIcon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+}
+
+.btn.btnNormal{
+    background-color: #bd6903;
+    border: 1px solid #bd6903;
+    /* background: linear-gradient(0deg, gold, black, orange); */
+}
+
+.btn.btnRed{
+    background-color: rgb(206, 0, 0);
+    border: 1px solid rgb(206, 0, 0);
+}
+
+.btn.btnTrans{
+    background: none;
+    border: 1px solid rgb(151, 151, 151);
+}
+
+.btn.btnTrans.black{
+    color: black;
+}
+
+.btn.btnTrans:hover{
+    background-color: rgb(46, 46, 46);
+    background-color: black;
+    /* border-color: black; */
+    color: white
+}
+
+form{
+    background-color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: 90%;
+    border-radius: 8px;
+}
+
+form p{
+    align-self: center;
+}
+
+form p span{
+    color: gray;
+}
+
+form p a{
+    color: blue;
+    text-decoration: none;
+}
+
+.inputFieldWrapper{
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #c5c5c5;
+    border-radius: 8px;
+    column-gap: 20px;
+}
+
+.inputFieldWrapper.noBorder{
+    border: none;
+}
+
+.inputFieldWrapper i{
+    color: #1b1a6a;
+}
+
+.inputField{
+    background: none;
+    outline: none;
+    border: none;
+    width: 100%;
+    color: black;
+}
+
+select.inputField option{
+    color: black;
+}
+
+
+/* The alert message box */
+.myalert {
+background-color: #15059b; /* Red */
+color: white;
+
+position: fixed;
+left: 5%;
+right: 5%;
+top: 15%;
+bottom: 15%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+box-sizing: border-box;
+padding: 40px 40px;
+row-gap: 49px;
+/* background-color: #8193bd; */
+/* background-color: #222222; */
+background-color: #363636c9;
+backdrop-filter: blur(17px);
+border: 1px solid white;
+border-radius: 7px;
+z-index: 2;
+}
+
+.myalert p{
+font-weight: bold;
+}
+
+/* The close button */
+.myalert .closebtn {
+color: white;
+font-weight: bold;
+font-size: 2rem;
+line-height: 27px;
+cursor: pointer;
+transition: 0.3s;
+padding: 10px;
+background-color: red;
+border-radius: 6px;
+position: absolute;
+top: 25px;
+right: 25px;
+}
+
+/* When moving the mouse over the close button */
+.myalert .closebtn:hover {
+color: black;
+}
+
+.formInfo{
+    row-gap: 10px;
+    background-color: #000000b5;
+    padding: 15px;
+    border-radius: 10px 0px;
+    font-size: 0.9rem;
+}
+.formInfo p{
+    text-align: left;
+}
+.formInfo.danger{
+    background-color: #c30707f5;
+}
+
+.profilePicWrapper {
+    border-radius: 100%;
+    background-color: #0a4c9f;
+    background-color: #6a3600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+.profilePicWrapper.small{
+    width: 34px;
+    height: 34px;
+}
+.profilePicWrapper.large{
+    width: 20vh;
+    height: 20vh;
+}
+.dpImg{
+    transition: 0.5s;
+    width: 105%;
+}
