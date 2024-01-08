@@ -7,7 +7,8 @@ import json
 import os
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app)
+# cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = 'salmankhokhar'
 
 # files upload configration
