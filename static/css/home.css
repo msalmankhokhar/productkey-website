@@ -1,38 +1,51 @@
-:root{
-    /* --main-color: #005392; */
+/* :root{
     --main-color: #5f0092;
-}
+} */
 p{
     margin: 0px;
 }
 body{
     background-color: rgb(205, 202, 202);
 }
+#siteName{
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
 #container{
 }
 #header{
     color: white;
-    background-color: var(--main-color);
+    /* background-color: var(--main-color); */
+    background-color: #c8c2c240;
     border-radius: 10px 10px 0px 0px;
     padding: 20px;
 }
 #contentWrapper{
-    background-color: #ffffffd9;
+    background-color: #ffffff;
     backdrop-filter: blur(20px);
     /* display: flex;
     flex-wrap: wrap; */
-    min-height: 76vh;
+    /* min-height: 76vh; */
+    /* min-height: 55vh; */
+    min-height: 60vh;
     border-radius: 0px 0px 10px 10px;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
     justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
+    row-gap: 40px;
+    column-gap: 80px;
 }
 #contentWrapper p{
     align-self: center;
+    max-width: 577px;
+
 }
 .sideItem{
-    padding: 20px;
+    /* padding: 20px; */
 }
 .inputWrapper{
     display: flex;
@@ -62,14 +75,7 @@ label{
     color: white;
 }
 
-.mybtn{
-    text-decoration: none;
-    padding: 20px;
-    background-color: var(--main-color);
-    border: none;
-    border-radius: 10px;
-    color: white;
-}
+
 #formWrapper{
     display: flex;
     flex-direction: column;
@@ -80,4 +86,7 @@ label{
 }
 .sugg-li img{
     width: 34px;
+}
+#continueBtn{
+    box-shadow: 2px 2px 10px #939399;
 }

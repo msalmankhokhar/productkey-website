@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, session, redirect, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from random import randint
 import json
 import os
 
 app = Flask(__name__)
-cors = CORS(app)
+# cors = CORS(app)
 # cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = 'salmankhokhar'
 
@@ -21,6 +21,9 @@ app_settings = json.load(open("settings.json", "r"))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
 database = SQLAlchemy(app)
 migrate = Migrate(app, database)
+
+# list of websites allowed to access the API
+allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500"]
 
 class Softwares(database.Model):
     id = database.Column(database.String(50), primary_key=True, nullable=False)
@@ -47,12 +50,14 @@ def under_maintenance(e):
     return render_template('503.html'), 503
 
 @app.route("/api/id_dict", methods=["GET"])
+@cross_origin(allowed_websites)
 def api_totalData():
     softwares = Softwares.query.all()
     id_dict = json.dumps({ sw.name : [sw.id, sw.imgSrc] for sw in softwares })
     return id_dict
 
 @app.route("/api/getSoftwareInfo/<string:sw_id>", methods=["GET"])
+@cross_origin(allowed_websites)
 def getSoftwareInfo(sw_id):
     software = Softwares.query.filter_by(id=sw_id).first()
     response = {
@@ -64,24 +69,27 @@ def getSoftwareInfo(sw_id):
     return response
 
 @app.route("/api/suggestions", methods=["GET"])
+@cross_origin(allowed_websites)
 def api_sugg():
     softwares = Softwares.query.all()
     sw_names = json.dumps([ sw.name for sw in softwares])
     return sw_names
 
 @app.route("/product_key/<string:id>", methods=["GET"])
+@cross_origin(allowed_websites)
 def return_key(id):
     sw = Softwares.query.filter_by(id=id).first()
     data_json = { "key" : sw.key }
     return data_json
 
 @app.route("/", methods=["GET"])
+@cross_origin(allowed_websites)
 def home():
     softwares = Softwares.query.all()
     sw_names = json.dumps([ sw.name for sw in softwares])
     id_dict = json.dumps({ sw.name : [sw.id, sw.imgSrc] for sw in softwares })
-    print(sw_names)
-    print(id_dict)
+    # print(sw_names)
+    # print(id_dict)
     return render_template("home.html", sw_names= sw_names, id_dict=id_dict)
 
 @app.route("/item/<string:id>", methods=["GET"])
