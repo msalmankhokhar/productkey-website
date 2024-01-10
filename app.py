@@ -83,7 +83,7 @@ def return_key(id):
     return data_json
 
 @app.route("/", methods=["GET"])
-@cross_origin(allowed_websites)
+# @cross_origin(allowed_websites)
 def home():
     softwares = Softwares.query.all()
     sw_names = json.dumps([ sw.name for sw in softwares])
