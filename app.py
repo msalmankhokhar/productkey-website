@@ -7,23 +7,18 @@ import json
 import os
 
 app = Flask(__name__)
-cors = CORS(app)
-# cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = 'salmankhokhar'
-
 # files upload configration
 # UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER = 'static/uploads'
-
 app_settings = json.load(open("settings.json", "r"))
-
 # setting up database configration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
 database = SQLAlchemy(app)
 migrate = Migrate(app, database)
-
 # list of websites allowed to access the API
-allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500"]
+allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500", "https://msalmankhokhar.github.io/keey.es_FrontEnd"]
+cors = CORS(app, resources={r"*": {"origins": allowed_websites}})
 
 class Softwares(database.Model):
     id = database.Column(database.String(50), primary_key=True, nullable=False)
@@ -50,14 +45,12 @@ def under_maintenance(e):
     return render_template('503.html'), 503
 
 @app.route("/api/id_dict", methods=["GET"])
-@cross_origin(allowed_websites)
 def api_totalData():
     softwares = Softwares.query.all()
     id_dict = json.dumps({ sw.name : [sw.id, sw.imgSrc] for sw in softwares })
     return id_dict
 
 @app.route("/api/getSoftwareInfo/<string:sw_id>", methods=["GET"])
-@cross_origin(allowed_websites)
 def getSoftwareInfo(sw_id):
     software = Softwares.query.filter_by(id=sw_id).first()
     response = {
@@ -69,21 +62,18 @@ def getSoftwareInfo(sw_id):
     return response
 
 @app.route("/api/suggestions", methods=["GET"])
-@cross_origin(allowed_websites)
 def api_sugg():
     softwares = Softwares.query.all()
     sw_names = json.dumps([ sw.name for sw in softwares])
     return sw_names
 
 @app.route("/product_key/<string:id>", methods=["GET"])
-@cross_origin(allowed_websites)
 def return_key(id):
     sw = Softwares.query.filter_by(id=id).first()
     data_json = { "key" : sw.key }
     return data_json
 
 @app.route("/", methods=["GET"])
-# @cross_origin(allowed_websites)
 def home():
     softwares = Softwares.query.all()
     sw_names = json.dumps([ sw.name for sw in softwares])
