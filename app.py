@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
 database = SQLAlchemy(app)
 migrate = Migrate(app, database)
 # list of domains allowed to access the API
-allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500", "http://localhost:5500", "http://192.168.100.101:5500", "https://msalmankhokhar.github.io/keey.es_FrontEnd"]
+allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500", "http://localhost:5500", "http://192.168.100.101:5500", "https://msalmankhokhar.github.io"]
 # cors = CORS(app, resources={r"*": {"origins": allowed_websites}})
 cors = CORS(app, origins=allowed_websites)
 
