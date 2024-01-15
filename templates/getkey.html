@@ -288,50 +288,43 @@
     let infoList;
     if (choice == "Key") {
          infoList = [
-        "Processing your request",
-        "Connecting to server",
-        "Performing Auto-Unlock",
-        "Fetching product key"
-    ];
-    } else {
-        
-         infoList = [
+            "Processing your request",
             "Connecting to server",
             "Performing Auto-Unlock",
+            "Fetching product key"
+                    ];
+    } else {       
+         infoList = [
+            "Processing your request",
+            "Connecting to server",
             "Generating Download link",
             "Starting download"
-        ];
+                    ];
     }
 
     function startDownload(url) {
-    var downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = url.split('/').pop();
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-}
+        let downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = url.split('/').pop();
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
 
     let pBar_interval = setInterval(() => {       
-        pBar_length += 0.81;
+        pBar_length += 0.8;
         pBar.style.width = pBar_length.toString() + "%";
-        if (pBar_length >= 99.63) {
+        if (pBar_length >= 100) {
             clearInterval(pBar_interval);
             if (choice == "Crack") {
-                
-                console.log("pbar interval cleared")
-                let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
-                // window.open(linkforDownload);
-                startDownload(linkforDownload);
-                pBar.parentElement.style.opacity = 0;
-                spinner.style.display = "none";
-                info.innerHTML = "Thanks for your download !";
-            }
+            let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
+            startDownload(linkforDownload);
+            pBar.parentElement.style.opacity = 0;
+            spinner.style.display = "none";
+            info.innerHTML = "Thanks for your download !";
+            }   
         }
     }, 100);
-
-    let currentIndex = 0;
-    let progress_interval = setInterval(updateInfo, 2000);
 
     function showFinalKey(key) {
         spinner.style.display = "none";
@@ -342,38 +335,40 @@
         keyCont.style.color = "white";
     }
 
+    function run() {          
+        keyCont.style.display = "block";
+        let suffleKeyInterval = setInterval(generate_random_key, 201);
+        setTimeout(() => {
+            fetch(`${API_LINK}/product_key/{{item}}/{{platform}}/{{sw.id}}`, {
+                method: "GET"
+            }).then((resp) => {
+                return resp.json().then((respText) => {
+                clearInterval(suffleKeyInterval);
+                // clearInterval(pBar_interval);
+                showFinalKey(respText["key"]);
+                // pBar.parentElement.style.display = "none";
+                pBar.parentElement.style.opacity = 0;
+                })
+            })
+        }, 5000);   
+    }
+
     function updateInfo() {
-        let txt = infoList[currentIndex];
-        
+        let txt = infoList[currentIndex];       
         info.innerHTML = txt;
         console.log(txt);
         currentIndex++;
-
         if (currentIndex === infoList.length) {
-            clearInterval(progress_interval);
+            clearInterval(updateInfoInterval);
             if (choice == "Key") {
-                
-                keyCont.style.display = "block";
-                let suffleKeyInterval = setInterval(generate_random_key, 200);
-                setTimeout(() => {
-                    fetch(`${API_LINK}/product_key/{{item}}/{{platform}}/{{sw.id}}`, {
-                        method: "GET"
-                    }).then((resp) => {
-                        return resp.json().then((respText) => {
-                            clearInterval(suffleKeyInterval);
-                            clearInterval(pBar_interval);
-                            showFinalKey(respText["key"]);
-                            // pBar.parentElement.style.display = "none";
-                            pBar.parentElement.style.opacity = 0;
-                        })
-                    })
-                }, 5000);
+                run();
+                // console.log("run");
             }
-            
-
-
         }
     }
+
+    let currentIndex = 0;
+    let updateInfoInterval = setInterval(updateInfo, 2000);
 
 </script>
 

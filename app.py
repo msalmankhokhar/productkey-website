@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 app.secret_key = 'salmankhokhar'
 # files upload configration
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER = os.path.join(os.getcwd(), "static", "uploads")
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER = os.path.join("static", "uploads")
 app_settings = json.load(open("settings.json", "r"))
 # setting up database configration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
