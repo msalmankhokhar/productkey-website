@@ -202,8 +202,8 @@ def download_crack(item, sw_id, platform):
         elif item == "Game":
             software = Games.query.filter_by(id=sw_id).first()
         cracksDict = json.loads(software.cracks)
-        filepath = cracksDict[platform]
-        return send_file(filepath)
+        filename = cracksDict[platform]
+        return send_file(os.path.join("static", "uploads", "Cracks", sw_id, platform, filename))
 
 @app.route("/admin/add_new/<string:item>", methods=["GET", "POST"])
 def admin_add_new_movie(item):
@@ -245,7 +245,7 @@ def admin_add_new_movie(item):
                     filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
                     finalFilePath = os.path.join(save_directory, filename)
                     file.save(finalFilePath)
-                    cracks[platform] = finalFilePath
+                    cracks[platform] = filename
 
         if item == "Software":            
             software = Softwares(
@@ -327,7 +327,7 @@ def admin_edit_software(item, Id):
                     filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
                     finalFilePath = os.path.join(save_directory, filename)
                     file.save(finalFilePath)
-                    cracks[platform] = finalFilePath
+                    cracks[platform] = filename
 
         sw.name = name
         sw.imgSrc = imgSrc
