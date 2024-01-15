@@ -1,210 +1,292 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
 
-{% block title %}Add software - Admin{% endblock title %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Add New Software{% endblock title %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
 
-{% block desc %}Add a new software in the database{% endblock desc %}
-
-{% block css %}
-
-<style>
-
-main{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 5vw;
-}
-
-.left{
-    /* width: 50%; */
-    display: inherit;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.left img{
-    width: 35vw;
-}
-
-.right{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* width: 50%; */
-    row-gap: 5vh;
-}
-
-.right h1{
-    font-size: 2rem;
-}
-
-form{
-    background-color: white;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
-    width: 90%;
-    border-radius: 8px;
-}
-
-form p{
-    align-self: center;
-}
-
-form p span{
-    color: gray;
-}
-
-form p a{
-    color: blue;
-    text-decoration: none;
-}
-
-.inputFieldWrapper{
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    border: 1px solid #c5c5c5;
-    border-radius: 8px;
-    column-gap: 20px;
-}
-
-.inputFieldWrapper i{
-    color: #1b1a6a;
-}
-
-.inputField{
-    background: none;
-    outline: none;
-    border: none;
-    width: 100%;
-    color: black;
-}
-
-select.inputField option{
-    color: black;
-}
-
-</style>
-
-{% endblock css %}
-
-{% block nav %}{% endblock nav %}
-
-{% block header %}{% endblock header %}
-
-{% block main %}
-
-<main>
-    <!-- <section class="left">
-    
-    <img src="/static/img/logos/Png/Influx global logo Final Files-07.png" alt="">
-
-    </section> -->
-    <section class="right">
-    <!-- <h1 class="textCenter"> -->
-    <!-- <a style="text-decoration: none;" href="/">InfluxGlobal.com</a> -->
-    <!-- </h1> -->
-    <h1 class="textCenter">Add new software</h1>
-        <form action="" method="post" id="form">
-            
-            <div class="inputFieldWrapper">
-                <!-- <i class="fa-solid fa-ticket"></i> -->
-                <input class="inputField inputFieldJs" type="text" placeholder="Software name" required id="noOfTicketsInput" name="name">
-            </div>
-            <div class="inputFieldWrapper">
-                <!-- <i class="fa-solid fa-ticket"></i> -->
-                <input class="inputField inputFieldJs" type="text" placeholder="Product Key" required id="keyInput" name="key">
-            </div>
-            <div class="inputFieldWrapper">
-                <!-- <i class="fa-solid fa-ticket"></i> -->
-                <input class="inputField inputFieldJs" type="text" placeholder="Keywords seperated by commas" required id="tagsInput" name="tags">
+<body>
+    <div class="container my-3">
+        {% block main %}
+        <h1>Add new {{item}}</h1>
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+            <div class="mb-3">
+                <label for="nameInput" class="form-label">{{item}} name</label>
+                <input type="text" class="form-control requiredInput" id="nameInput" name="name" required>
             </div>
 
-            <!-- <div class="inputFieldWrapper">
-                <i class="fa-solid fa-globe"></i>
-                <select class="inputField" name="placement" id="countryCodeSelector" required>
-                    <option value="" class="selected">Select movie category</option>
-                    <option value="24 hour" selected>24 Hour</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="pre sale">Pre Sale</option>
-                </select>
-            </div> -->
+            <div class="mb-3">
+                <label for="">Platforms available</label>
+                {% for pf in all_db_platforms %}
+                <div class="form-check form-switch m-1">
+                    <input class="form-check-input platformInput" type="checkbox" role="switch"
+                        id="flexSwitchCheckChecked" name="platform{{pf.name}}" myvalue="{{pf.name}}">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">{{pf.name}}</label>
 
-            <div class="inputFieldWrapper">
-                <!-- <i class="fa-solid fa-link"></i> -->
-                <input class="inputField inputFieldJs" type="text" placeholder="Image link (optional)" id="imgSrcInput" name="imgSrc">
+                    <div class="mb-3" id="div-for{{pf.name}}" style="display: none;">
+                        <label for="">For {{pf.name}}</label>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInput {{pf.name}}" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked" name="for{{pf.name}}" platform="{{pf.name}}">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Key</label>
+                            <div class="mb-3" id="div-keyinputfor{{pf.name}}" style="display: none;">
+                                <label for="nameInput" class="form-label">Key for {{pf.name}}</label>
+                                <input type="text" class="form-control requiredInput" id="keyinputfor{{pf.name}}"
+                                    name="keyfor{{pf.name}}">
+                            </div>
+                        </div>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInputCrack {{pf.name}}" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked" name="crackfor{{pf.name}}" platform="{{pf.name}}">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Crack</label>
+                            <div class="mb-3" id="div-fileinputfor{{pf.name}}" style="display: none;">
+                                <label for="formFile" class="form-label">Upload .zip file</label>
+                                <input class="form-control requiredInput" type="file" id="fileinputfor{{pf.name}}"
+                                    name="filefor{{pf.name}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- <div class="form-check form-switch m-1">
+                    <input class="form-check-input platformInput" type="checkbox" role="switch"
+                        id="flexSwitchCheckChecked"name="platformWindows" myvalue="Windows">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Windows</label>
+
+                    <div class="mb-3" id="div-forWindows" style="display: none;">
+                        <label for="">For Windows</label>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInput Windows" type="checkbox" role="switch" id="flexSwitchCheckChecked"name="forWindows" platform="Windows">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Key</label>
+                            <div class="mb-3" id="div-keyinputforWindows" style="display: none;">
+                                <label for="nameInput" class="form-label">Key for Windows</label>
+                                <input type="text" class="form-control requiredInput" id="keyinputforWindows" name="keyforWindows" required>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInputCrack Windows" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked" name="crackforWindows" platform="Windows">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Crack</label>
+                            <div class="mb-3" id="div-fileinputforWindows" style="display: none;">
+                                <label for="formFile" class="form-label">Upload .zip file</label>
+                                <input class="form-control requiredInput" type="file" id="fileinputforWindows"
+                                    name="fileforWindows" required>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-check form-switch m-1">
+                    <input class="form-check-input platformInput" type="checkbox" role="switch"
+                        id="flexSwitchCheckChecked" name="platformAndroid" myvalue="Android">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Android</label>
+
+                    <div class="mb-3" id="div-forAndroid" style="display: none;">
+                        <label for="">For Android</label>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInput Android" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked"name="forAndroid" platform="Android">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Key</label>
+                            <div class="mb-3" id="div-keyinputforAndroid" style="display: none;">
+                                <label for="nameInput" class="form-label">Key for Android</label>
+                                <input type="text" class="form-control requiredInput" id="keyinputforAndroid"
+                                    name="keyforAndroid" required>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInputCrack Android" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked" name="crackforWindows" platform="Android">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Crack</label>
+                            <div class="mb-3" id="div-fileinputforAndroid" style="display: none;">
+                                <label for="formFile" class="form-label">Upload .zip file</label>
+                                <input class="form-control requiredInput" type="file" id="fileinputforAndroid"
+                                    name="fileforAndroid" required>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-check form-switch m-1">
+                    <input class="form-check-input platformInput" type="checkbox" role="switch"
+                        id="flexSwitchCheckChecked" name="platformMac" myvalue="Mac">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Mac</label>
+
+                    <div class="mb-3" id="div-forMac" style="display: none;">
+                        <label for="">For Mac</label>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInput Mac" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked"name="Mac" platform="Mac">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Key</label>
+                            <div class="mb-3" id="div-keyinputforMac" style="display: none;">
+                                <label for="nameInput" class="form-label">Key for Mac</label>
+                                <input type="text" class="form-control requiredInput" id="keyinputforMac" name="keyforMac"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch m-1">
+                            <input class="form-check-input forInputCrack Mac" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked" name="crackforWindows" platform="Mac">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Crack</label>
+                            <div class="mb-3" id="div-fileinputforMac" style="display: none;">
+                                <label for="formFile" class="form-label">Upload .zip file</label>
+                                <input class="form-control requiredInput" type="file" id="fileinputforMac" name="fileforMac"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> -->
             </div>
-            <div class="inputFieldWrapper">
-                <!-- <i class="fa-solid fa-link"></i> -->
-                <textarea class="inputField inputFieldJs" placeholder="Description" id="descInput" name="desc" cols="30" rows="10"></textarea>
+
+            <div id="for-container">
+
+
+
+
+
             </div>
-            <button type="submit" class="btn btnNormal" id="submitBtn">Add Software</button>
-            <!-- <p><span>Already Registered? <a href="/login">Login Here</a></span></p> -->
+
+            <div class="mb-3">
+                <label for="iconInput" class="form-label">Icon Link</label>
+                <input type="text" class="form-control requiredInput" id="iconInput" name="imgSrc" required>
+            </div>
+            <div class="mb-3">
+                <label for="descInput" class="form-label">Description</label>
+                <textarea class="form-control requiredInput" id="descInput" rows="3" name="desc" required></textarea>
+            </div>
+            <button id="submitBtn" type="button">Submit</button>
         </form>
-    </section>
-</main>
-
-{% endblock main %}
-
-{% block footer %}{% endblock footer %}
-
-{% block js %}
-
+        {% endblock main %}
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script>
 <script>
-
-let pageForm = document.getElementById('form');
-let countryCodeSelector = document.getElementById('countryCodeSelector');
-
-let referalCodeInput = document.getElementById('referalCodeInput');
-let noOfTicketsInput = document.getElementById('noOfTicketsInput');
-
-let submitBtn = document.getElementById('submitBtn');
-
-countryCodeSelector.setCustomValidity("Please select a country");
-
-let inputsList = [referalCodeInput, noOfTicketsInput]
-
-function isAllFieldsFilled(){
-    let response = true
-    inputsList.forEach(inputElement => {
-        if(!(inputElement.checkValidity())){
-            console.log('1st if of isallfiledsfilled')
-            inputElement.reportValidity();
-            response = false
-        }
+    let platformInputs = document.querySelectorAll(".platformInput");
+    let forInputs = document.querySelectorAll(".forInput");
+    let forInputCracks = document.querySelectorAll(".forInputCrack");
+    let form = document.getElementById("form");
+    let requiredInputs = document.querySelectorAll(".requiredInput");
+    platformInputs.forEach(input => {
+        input.addEventListener("change", (e) => {
+            if (input.checked) {
+                document.getElementById(`div-for${input.getAttribute("myvalue")}`).style.display = "block";
+            }
+            else {
+                document.getElementById(`div-for${input.getAttribute("myvalue")}`).style.display = "none";
+            }
+        })
     });
-    if (countryCodeSelector.value == ""){
-        console.log('2nd if of isallfiledsfilled')
-        window.alert("Please select movie category")
-        response = false
-    }
-    return response
-}
 
-function validateForm(){
-    if (isAllFieldsFilled()) {
-        return true
-    } else {
-        return false
-    }
-}
+    forInputs.forEach(input => {
+        input.addEventListener("change", (e) => {
+            if (input.checked) {
+                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "block";
+                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).required = true;
+            }
+            else {
+                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "none";
+                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).required = true;
+            }
+        })
+    });
 
-submitBtn.addEventListener('click', (e)=>{
-    e.preventDefault();
-    if (validateForm()){
-        // window.alert('Form sumbited without any error');
-        pageForm.submit();
-    }
-    // else{
-    //     window.alert('Form not submitted successfully');
-    // }
-})
+    forInputCracks.forEach(input => {
+        input.addEventListener("change", (e) => {
+            if (input.checked) {
+                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "block";
+                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).required = true;
+            }
+            else {
+                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "none";
+                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).required = true;
+            }
+        })
+    });
 
+    function isPlatformSelected() {
+        let selectedPlatforms = [];
+        platformInputs.forEach(platformInput => {
+            console.log("inside for loop")
+            if (platformInput.checked) {
+                console.log("inside if")
+                selectedPlatforms.push(platformInput.getAttribute("myvalue"));
+            }
+        });
+        console.log(`length of selected platfroms is ${selectedPlatforms.length}`)
+        if (selectedPlatforms.length == 0) {
+            return false
+        } else {
+            return selectedPlatforms
+        }
+    }
+
+    function isForsSelected(platfrom) {
+        let selectedFors = [];
+        document.querySelectorAll(`.forInput.${platfrom}, .forInputCrack.${platfrom}`).forEach(forInput => {
+            if (forInput.checked) {
+                nameTag = forInput.getAttribute("name");
+                console.log(`nametag is ${nameTag}`);
+                if (nameTag.startsWith("key")) {
+                    selectedFors.push(document.getElementById(`keyinputfor${platfrom}`))
+                } else {
+                    selectedFors.push(document.getElementById(`fileinputfor${platfrom}`))
+                }
+            }
+        });
+        if (selectedFors.length == 0) {
+            return false
+        } else {
+            console.log("selected fors are not []")
+            return selectedFors
+        }
+    }
+
+    function validateRequiredInputs() {
+        let response = true;
+        let requiredInputsArray = Array.from(requiredInputs);
+        requiredInputsArray.reverse();
+        requiredInputsArray.forEach(element => {
+            if (!(element.checkValidity())) {
+                element.reportValidity();
+                response = false;
+            }
+        });
+        return response;
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", (event) => {
+        // event.preventDefault();
+        console.log("Entered the submit button event listener");
+        if (isPlatformSelected()) {
+            console.log("platform is selected");
+            let selectedPlatforms = isPlatformSelected();
+            selectedPlatforms.forEach(selectedPlatform => {
+                let selectedFors = isForsSelected(selectedPlatform);
+                if (selectedFors) {
+                    console.log("form is submitting ...");
+                    if (validateRequiredInputs()) {
+                        console.log("form is valid")
+                        form.submit();
+                    }
+                    else {
+                        console.log("validateRequiredInputs func retured false")
+                    }
+                } else {
+                    window.alert(`Please select Key or Crack for ${selectedPlatform}`)
+                }
+            });
+        } else {
+            window.alert("Please select a platform");
+        }
+    })
 </script>
+{% block js %}{% endblock js %}
 
-{% endblock js %}
+</html>

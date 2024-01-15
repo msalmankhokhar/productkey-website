@@ -38,7 +38,7 @@
     {% endwith %}
 
     <div id="topBar">
-        <a href="/admin" id="logoLink" class="textCenter">Keys.site <span>Admin Dashboard</span></a>
+        <a href="/admin" id="logoLink" class="textCenter">Keey.es <span>Admin Dashboard</span></a>
         <button id="menuBtn" class="btn btn-primary">
             <i class="fa-solid fa-bars"></i>
             <!-- <span>Menu</span> -->
@@ -48,9 +48,13 @@
         <a href="/admin" id="logoLink" class="textCenter">Menu</a>
         <div id="navlinksContainer">
 
-            <a href="/admin/all_softwares" class="navlink navlinkWithIcon">
+            <a href="/admin/all/Software" class="navlink navlinkWithIcon">
                 <i class="fa-solid fa-film"></i>
                 <span>Softwares</span>
+            </a>
+            <a href="/admin/all/Game" class="navlink navlinkWithIcon">
+                <i class="fa-solid fa-film"></i>
+                <span>Games</span>
             </a>
             
             <a id="logoutBtn" href="/admin/logout" class="btn btn-danger btnWithIcon">
@@ -62,18 +66,19 @@
 
     <main id="main" class="container py-3">
         {% block main %}
-        <h1 class="my-1 text-center">All Softwares</h1>
-        <a href="/admin/add_new_software" class="btn btn-success my-3">Add New Software</a>
+        <h1 class="my-1 text-center">All {{item}}s</h1>
+        <a href="/admin/add_new/{{item}}" class="btn btn-success my-3">Add New {{item}}</a>
         <div class="tableWrapper">
-            <table id="moviesTable" class="table">
+            <table class="table mytable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Id</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Key</th>
-                        <th scope="col">Tags</th>
                         <th scope="col">Thumbnail</th>
+                        <th scope="col">Platforms</th>
+                        <th scope="col">Keys</th>
+                        <th scope="col">Cracks</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -83,12 +88,50 @@
                         <td>{{ softwaresList.index(sw) + 1 }}</td>
                         <td>{{sw.id}}</td>
                         <td>{{sw.name}}</td>
-                        <td>{{sw.key}}</td>
-                        <td>{{sw.tags}}</td>
-                        <td><img src="{{sw.imgSrc}}" alt="Thumbnail" style="width: 100px;"></td>
+                        <td><img src="{{sw.imgSrc}}" alt="Thumbnail" style="width: 65px;"></td>
+
+                        {% set platformsList = getPlatforms(sw) %}
+                        <td class="platformsTd">
+                            {% for pf in platformsList %}
+                            {{pf}}
+                            {% endfor %}
+                        </td>
+
                         <td>
-                            <a href="/admin/edit_software/{{sw.id}}" class="btn btn-info">Edit</a>
-                            <a href="/admin/delete_software/{{sw.id}}" class="btn btn-danger movieDelBtn">Delete</a>
+                            <table class="mytable">
+                                <tbody>
+                                    {% set keysDict = getKeys(sw) %}
+                                    {% for pf, key in keysDict.items() %}
+                                    <tr>
+                                        <th>{{pf}}</th>
+                                        <td>{{key}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <table class="mytable">
+                                <tbody>
+                                    {% set cracksDict = getCracks(sw) %}
+                                    {% for pf, path in cracksDict.items() %}
+                                    <tr>
+                                        <th>{{pf}}</th>
+                                        {% if path %}
+                                        <td><a target="_blank" href="/download_crack/{{item}}/{{sw.id}}/{{pf}}">Download Link</a></td>
+                                        {% else %}
+                                        <td>No</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <a href="/admin/edit/{{item}}/{{sw.id}}" class="btn btn-info">Edit</a>
+                            <a href="/admin/delete/{{item}}/{{sw.id}}" class="btn btn-danger movieDelBtn">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}

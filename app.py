@@ -1,31 +1,43 @@
-from flask import Flask, render_template, request, session, redirect, flash, send_from_directory
+from flask import Flask, render_template, request, session, redirect, flash, send_from_directory, send_file, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin
 from random import randint
+from werkzeug.utils import secure_filename
 import json
 import os
 
 app = Flask(__name__)
 app.secret_key = 'salmankhokhar'
 # files upload configration
-# UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER = os.path.join(os.getcwd(), "static", "uploads")
 app_settings = json.load(open("settings.json", "r"))
 # setting up database configration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
 database = SQLAlchemy(app)
 migrate = Migrate(app, database)
-# list of websites allowed to access the API
-allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500", "https://msalmankhokhar.github.io/keey.es_FrontEnd"]
-cors = CORS(app, resources={r"*": {"origins": allowed_websites}})
+# list of domains allowed to access the API
+allowed_websites = ["https://keey.es", "https://www.keey.es", "http://127.0.0.1:5500", "http://localhost:5500", "http://192.168.100.101:5500", "https://msalmankhokhar.github.io/keey.es_FrontEnd"]
+# cors = CORS(app, resources={r"*": {"origins": allowed_websites}})
+cors = CORS(app, origins=allowed_websites)
 
+class Platfroms(database.Model):
+    name = database.Column(database.String(100), primary_key=True, nullable=False)
 class Softwares(database.Model):
     id = database.Column(database.String(50), primary_key=True, nullable=False)
-    name = database.Column(database.String, nullable=False, unique=True)
-    key = database.Column(database.String(100), nullable=True, unique=False)
+    name = database.Column(database.String, nullable=True, unique=True)
+    keys = database.Column(database.String(150), nullable=True, unique=False)
+    platforms = database.Column(database.String(100), nullable=True, unique=False)
+    cracks = database.Column(database.String(500), nullable=True, unique=False)
     imgSrc = database.Column(database.String, nullable=True, unique=False)
-    tags = database.Column(database.String, nullable=True, unique=False)
+    desc = database.Column(database.Text, nullable=True, unique=False)
+class Games(database.Model):
+    id = database.Column(database.String(50), primary_key=True, nullable=False)
+    name = database.Column(database.String, nullable=True, unique=True)
+    keys = database.Column(database.String(150), nullable=True, unique=False)
+    platforms = database.Column(database.String(100), nullable=True, unique=False)
+    cracks = database.Column(database.String(500), nullable=True, unique=False)
+    imgSrc = database.Column(database.String, nullable=True, unique=False)
     desc = database.Column(database.Text, nullable=True, unique=False)
 
 # Command for database migrations and commit
@@ -35,6 +47,13 @@ class Softwares(database.Model):
 # creating database tables
 with app.app_context():
     database.create_all()
+
+def getPlatforms(software:Softwares):
+    return json.loads(software.platforms)
+def getKeys(software:Softwares):
+    return json.loads(software.keys)
+def getCracks(software:Softwares):
+    return json.loads(software.cracks)
 
 @app.route('/favicon.ico')
 def favicon():
@@ -46,9 +65,10 @@ def under_maintenance(e):
 
 @app.route("/api/id_dict", methods=["GET"])
 def api_totalData():
-    softwares = Softwares.query.all()
-    id_dict = json.dumps({ sw.name : [sw.id, sw.imgSrc] for sw in softwares })
-    return id_dict
+    # softwares = Softwares.query.all()
+    softwares_id_dict = { sw.name : [sw.id, sw.imgSrc, "Software"] for sw in Softwares.query.all() }
+    games_id_dict = { sw.name : [sw.id, sw.imgSrc, "Game"] for sw in Games.query.all() }
+    return json.dumps(softwares_id_dict | games_id_dict)
 
 @app.route("/api/getSoftwareInfo/<string:sw_id>", methods=["GET"])
 def getSoftwareInfo(sw_id):
@@ -63,14 +83,18 @@ def getSoftwareInfo(sw_id):
 
 @app.route("/api/suggestions", methods=["GET"])
 def api_sugg():
-    softwares = Softwares.query.all()
-    sw_names = json.dumps([ sw.name for sw in softwares])
+    # softwares = Softwares.query.all() + Games.query.all()
+    sw_names = json.dumps([ sw.name for sw in Softwares.query.all()] + [ sw.name for sw in Games.query.all()])
+    print(sw_names)
     return sw_names
 
-@app.route("/product_key/<string:id>", methods=["GET"])
-def return_key(id):
+@app.route("/product_key/<string:item>/<string:platfrom>/<string:id>", methods=["GET"])
+def return_key(item, platfrom, id):
     sw = Softwares.query.filter_by(id=id).first()
-    data_json = { "key" : sw.key }
+    if item == "Game":
+        sw = Games.query.filter_by(id=id).first()
+    key = getKeys(sw)[platfrom]
+    data_json = { "key" : key }
     return data_json
 
 @app.route("/", methods=["GET"])
@@ -82,19 +106,42 @@ def home():
     # print(id_dict)
     return render_template("home.html", sw_names= sw_names, id_dict=id_dict)
 
-@app.route("/item/<string:id>", methods=["GET"])
-def item(id):
+@app.route("/item/<string:type>/<string:id>", methods=["GET"])
+def item(type, id):
     selected_software = Softwares.query.filter_by(id=id).first()
+    if type == "Game":
+        selected_software = Games.query.filter_by(id=id).first()
     if selected_software:
-        return render_template("item.html", sw=selected_software)
+        return render_template("item.html", sw=selected_software, getPlatforms=getPlatforms, item=type)
     else:
         return "This software does not exist in our database"
     
-@app.route("/get_key/<string:id>", methods=["GET"])
-def getKey(id):
+@app.route("/choose/<string:item>/<string:platform>/<string:id>", methods=["GET"])
+def choose(item, platform, id):
     selected_software = Softwares.query.filter_by(id=id).first()
+    if item == "Game":
+        selected_software = Games.query.filter_by(id=id).first()
     if selected_software:
-        return render_template("getkey.html", sw=selected_software)
+        keys = getKeys(selected_software)
+        cracks = getCracks(selected_software)
+        if platform in keys and platform in cracks:
+            available_choices = "both"
+        elif keys[platform]:
+            available_choices = "Key"
+        else:
+            available_choices = "Crack"
+        return render_template("choose.html", sw=selected_software, item=item, platform=platform, available=available_choices)
+    else:
+        return "This software does not exist in our database"
+    
+@app.route("/get_key/<string:item>/<string:platform>/<string:id>/<string:choice>", methods=["GET"])
+def getKey(item, platform, id, choice):
+    selected_software = Softwares.query.filter_by(id=id).first()
+    if item == "Game":
+        selected_software = Games.query.filter_by(id=id).first()
+
+    if selected_software:
+        return render_template("getkey.html", sw=selected_software, item=item, platform=platform, choice=choice)
     else:
         return "This software does not exist in our database"
 
@@ -102,7 +149,7 @@ def getKey(id):
 def admin():
     if request.method == "GET":
         if "adminuser" in session:
-            return redirect("/admin/all_softwares")
+            return redirect("/admin/all/Software")
         else:
             return redirect("/admin/login")
         
@@ -120,13 +167,19 @@ def admin_login():
             return redirect("/admin")
         else:
             return "<h1 style='margin: 15px;'>Wrong password try Again</h1>"
-        
-@app.route("/admin/all_softwares", methods=["GET"])
-def admin_all_softwares():
+
+@app.route("/admin/all/<string:item>", methods=["GET"])
+def admin_all_softwares(item):
     if request.method == "GET":
         if "adminuser" in session:
-            softwaresList = Softwares.query.all()
-            return render_template('admin/softwares.html', softwaresList=softwaresList, currentNavlinkSpanText="Softwares")
+            currentNavlinkSpanText = "Softwares"
+            if item == "Software":
+                softwaresList = Softwares.query.all()
+            elif item == "Game":
+                softwaresList = Games.query.all()
+                currentNavlinkSpanText = "Games"
+
+            return render_template('admin/softwares.html', softwaresList=softwaresList, currentNavlinkSpanText=currentNavlinkSpanText, getPlatforms=getPlatforms, getKeys=getKeys, getCracks=getCracks, item=item)
         else:
             return redirect("/admin/login")
 
@@ -137,66 +190,152 @@ def generate_sw_ID():
             print(f"generated sw id {id}")
             sw = Softwares.query.filter_by(id = id).first()
             if sw == None:
-                return id
+                return str(id)
             else:
                 continue
 
-@app.route("/admin/add_new_software", methods=["GET", "POST"])
-def admin_add_new_movie():
+@app.route("/download_crack/<string:item>/<string:sw_id>/<string:platform>", methods=["GET"])
+def download_crack(item, sw_id, platform):
+    if request.method == "GET":
+        if item == "Software":
+            software = Softwares.query.filter_by(id=sw_id).first()
+        elif item == "Game":
+            software = Games.query.filter_by(id=sw_id).first()
+        cracksDict = json.loads(software.cracks)
+        filepath = cracksDict[platform]
+        return send_file(filepath)
+
+@app.route("/admin/add_new/<string:item>", methods=["GET", "POST"])
+def admin_add_new_movie(item):
+    print(f"item is get request is {item}")
+    all_db_platforms = Platfroms.query.all()
+    # platformValue_dict = {
+    #     "platformWindows" : "Windows",
+    #     "platformAndroid" : "Android",
+    #     "platformMac" : "Mac",
+    # }
     if request.method == "GET":
         if "adminuser" in session:
-            return render_template('admin/add_new_software.html')
+            return render_template('admin/add_new_software.html', item=item, all_db_platforms=all_db_platforms)
         else:
             return redirect("/admin/login")
     elif request.method == "POST":
+        print(f"item is post request is {item}")
         id = generate_sw_ID()
         name = request.form.get('name')
-        key = request.form.get('key')
         imgSrc = request.form.get('imgSrc')
-        tags = request.form.get('tags')
         desc = request.form.get('desc')
 
-        sw = Softwares(
-            id = id,
-            name = name,
-            key = key,
-            tags = tags,
-            imgSrc = imgSrc,
-            desc = desc
-        )
+        # PlatformList = [platformValue_dict[key] for key in platformValue_dict if request.form.get(key) == "on"]
+        PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
+        keys = { key : request.form.get(f"keyfor{key}") for key in PlatformList }
+        print(keys)
+        cracks = {}
+        #uploading crack files:
+        for platform in PlatformList:
+            file = request.files[f"filefor{platform}"]
+            if file:
+                save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", id, platform)
+                if not os.path.exists(save_directory):
+                    os.makedirs(save_directory, exist_ok=True)
+                file_extention = os.path.splitext(file.filename)[1]
+                allowed_extentions = [".zip", ".rar"]
+                if file_extention in allowed_extentions:
+                    print(f"name is {name}")
+                    filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
+                    finalFilePath = os.path.join(save_directory, filename)
+                    file.save(finalFilePath)
+                    cracks[platform] = finalFilePath
 
-        database.session.add(sw)
+        if item == "Software":            
+            software = Softwares(
+                id = id,
+                name = name,
+                imgSrc = imgSrc,
+                desc = desc,
+                keys = json.dumps(keys),
+                platforms = json.dumps(PlatformList),
+                cracks = json.dumps(cracks)
+            )
+        elif item == "Game":
+            software = Games(
+                id = id,
+                name = name,
+                imgSrc = imgSrc,
+                desc = desc,
+                keys = json.dumps(keys),
+                platforms = json.dumps(PlatformList),
+                cracks = json.dumps(cracks)
+            )
+
+        database.session.add(software)
         try:
             database.session.commit()
             flash(f"{name} added successfull in the database")
             print(f"{name} added successfull in the database")
         except Exception as e:
             flash(str(e))
-        return redirect("/admin")
-    
-@app.route("/admin/edit_software/<string:Id>", methods=["GET", "POST"])
-def admin_edit_software(Id):
-    sw = Softwares.query.get(Id)
+        return redirect(f"/admin/all/{item}")
+
+def getPlatformsText(software:Softwares):
+    return software.platforms
+def getKeysText(software:Softwares):
+    return software.keys
+def getCracksText(software:Softwares):
+    return software.cracks
+
+@app.route("/admin/edit/<string:item>/<string:Id>", methods=["GET", "POST"])
+def admin_edit_software(item, Id):
+    if item == "Software":
+        sw = Softwares.query.get(Id)
+    elif item == "Game":
+        sw = Games.query.get(Id)
+    # platformValue_dict = {
+    #     "platformWin" : "Windows",
+    #     "platformAnd" : "Android",
+    #     "platformMac" : "Mac",
+    # }
+    all_db_platforms = Platfroms.query.all()
     if request.method == "GET":
         if "adminuser" in session:
             if sw:
-                return render_template('admin/edit_software.html', sw=sw)
+                return render_template('admin/edit_software.html', sw=sw, getCracksText=getCracksText, getKeysText=getKeysText, getPlatformsText=getPlatformsText, item=item, all_db_platforms=all_db_platforms)
             else:
                 return "No software with this ID"
         else:
             return redirect("/admin/login")
     elif request.method == "POST":
         name = request.form.get('name')
-        key = request.form.get('key')
         imgSrc = request.form.get('imgSrc')
-        tags = request.form.get('tags')
         desc = request.form.get('desc')
 
+        PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
+        keys = { key : request.form.get(f"keyfor{key}") for key in PlatformList }
+        print(keys)
+        cracks = {}
+        #uploading crack files:
+        for platform in PlatformList:
+            file = request.files[f"filefor{platform}"]
+            if file:
+                save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", Id, platform)
+                if not os.path.exists(save_directory):
+                    os.makedirs(save_directory, exist_ok=True)
+                file_extention = os.path.splitext(file.filename)[1]
+                allowed_extentions = [".zip", ".rar"]
+                if file_extention in allowed_extentions:
+                    print(f"name is {name}")
+                    filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
+                    finalFilePath = os.path.join(save_directory, filename)
+                    file.save(finalFilePath)
+                    cracks[platform] = finalFilePath
+
         sw.name = name
-        sw.key = key
-        sw.tags = tags
         sw.imgSrc = imgSrc
         sw.desc = desc
+        sw.keys = json.dumps(keys)
+        sw.platforms = json.dumps(PlatformList)
+        if len(cracks) > 0:
+            sw.cracks = json.dumps(cracks)
 
         try:
             database.session.commit()
@@ -204,13 +343,16 @@ def admin_edit_software(Id):
             print(f"{name} updated successfully in the database")
         except Exception as e:
             flash(str(e))
-        return redirect("/admin")
+        return redirect(f"/admin/all/{item}")
     
-@app.route("/admin/delete_software/<string:Id>", methods=["GET"])
-def admin_delete_software(Id):
+@app.route("/admin/delete/<string:item>/<string:Id>", methods=["GET"])
+def admin_delete_software(item, Id):
     if request.method == "GET":
         if "adminuser" in session:
-            selected_sw = Softwares.query.filter_by(id=Id).first()
+            if item == "Software":
+                selected_sw = Softwares.query.filter_by(id=Id).first()
+            elif item == "Game":
+                selected_sw = Games.query.filter_by(id=Id).first()
             database.session.delete(selected_sw)
             database.session.commit()
             return redirect('/admin')
@@ -225,4 +367,3 @@ def admin_logout():
             return redirect("/admin/login")
         else:
             return redirect("/admin/login")
-        

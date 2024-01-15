@@ -4,12 +4,13 @@
 }
 
 body{
-    background: linear-gradient(45deg, black, transparent);
-    background-color: #02151e;
+    /* background: linear-gradient(45deg, black, transparent);
+    background-color: #02151e; */
+    background-color: whitesmoke;
 }
 
 main *{
-    /* color: black; */
+    color: black;
 }
 
 ul{
@@ -170,11 +171,11 @@ div.tableWrapper{
     height: 62vh;
 }
 
-#moviesTable{
+table.mytable{
     position: relative;
 }
 
-#moviesTable thead{
+table.mytable thead{
     position: sticky;
     top: 0px;
     background: #000058;
@@ -182,14 +183,18 @@ div.tableWrapper{
     z-index: 1;
 }
 
+table.mytable thead tr th{
+    color: white;
+}
+
 th, td{
     text-align: center;
     vertical-align: middle;
     font-size: 0.9rem;
-    min-width: 145px;
+    min-width: 195px;
 }
 
-#moviesTable td.btnsTd{
+table.mytable td.btnsTd{
     display: flex;
     flex-direction: row;
     column-gap: 5px;

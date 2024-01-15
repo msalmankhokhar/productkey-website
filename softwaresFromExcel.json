@@ -1,0 +1,42 @@
+[
+   {
+      "name": "Adobe Photoshop 2021",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png",
+      "platforms": "W,P,X",
+      "keyW": "FGSH-GDDG-VEHU-VSHD",
+      "keyP": "FGSH-GDDG-VEHU-VSHD",
+      "keyX": "FGSH-GDDG-VEHU-VSHD"
+   },
+   {
+      "name": "Adobe After Effects 2022",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png",
+      "platforms": "W,P,X",
+      "keyW": "FGSH-GDDG-VEHU-VSHD",
+      "keyP": "FGSH-GDDG-VEHU-VSHD",
+      "keyX": "FGSH-GDDG-VEHU-VSHD"
+   },
+   {
+      "name": "Adobe Premier Pro 2022",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png",
+      "platforms": "W,P,X",
+      "keyW": "FGSH-GDDG-VEHU-VSHD",
+      "keyP": "FGSH-GDDG-VEHU-VSHD",
+      "keyX": "FGSH-GDDG-VEHU-VSHD"
+   },
+   {
+      "name": "Adobe XD 2022",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png",
+      "platforms": "W,P,X",
+      "keyW": "FGSH-GDDG-VEHU-VSHD",
+      "keyP": "FGSH-GDDG-VEHU-VSHD",
+      "keyX": "FGSH-GDDG-VEHU-VSHD"
+   },
+   {
+      "name": "Adobe Illustrator 2022",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png",
+      "platforms": "W,P,X",
+      "keyW": "FGSH-GDDG-VEHU-VSHD",
+      "keyP": "FGSH-GDDG-VEHU-VSHD",
+      "keyX": "FGSH-GDDG-VEHU-VSHD"
+   }
+]

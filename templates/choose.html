@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Keey.es</title>
-        <meta name="description" content="We provide genuine activation keys of popular paid softwares">
+        <meta name="description" content="Get genuine activation keys and Cracks of popular paid games & softwares">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
@@ -142,54 +142,56 @@
       </div>
       <div id="contentWrapper">
         <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
-        <!-- <p id="desc">{{sw.desc}}</p> -->
-
-        <select id="selectTag" class="form-select form-select-lg mb-3" aria-label="Large select example">
-          <option value="none" selected>Select your Platform/OS</option>
-          {% set platformsList = getPlatforms(sw) %}
-          {% for pf in platformsList %}
-          <option class="platfromOption" value="{{pf}}">{{pf}}</option>
-          {% endfor %}
+        {% if available == "both" %}
+        <p id="desc" style="font-size: 1.2rem;">Both key and crack of <strong>{{sw.name}}</strong> are available for {{platform}}</p>
+        <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+            <option selected>Choose an option</option>
+            <option class="choiceOption" myvalue="Key">Key</option>
+            <option class="choiceOption" myvalue="Crack">Download Crack</option>
         </select>
-        
         <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
           Continue
+          <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i>
+        </button>
+        {% else %}
+        <p id="desc" style="font-size: 1.2rem;">{{available}} of <strong>{{sw.name}}</strong> is available for {{platform}}</p>
+        <select class="form-select form-select-lg mb-3" aria-label="Large select example" style="display: none;">
+            <option>Choose an option</option>
+            <option selected class="choiceOption" myvalue="{{available}}">{{available}}</option>
+        </select>
+        <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
+          Get {{available}}
           <!-- <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i> -->
         </button>
+        {% endif %}
+        
         </div>
         
     </div>
     </body>
     <!-- <script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script> -->
     <script>
-      let platfromOptionList =  document.querySelectorAll(".platfromOption");
-      let directlyGotoKeyPage = false;
-      // platfromOptionList.forEach(option => {
-        document.getElementById("selectTag").addEventListener("change", (e)=>{
-          if (e.target.value != "Windows" && e.target.value != "none") {
-            directlyGotoKeyPage = true;
-            document.getElementById("submitBtn").innerHTML = `Get Key for ${e.target.value}`;
-          }
-          else{
-            directlyGotoKeyPage = false;
-            document.getElementById("submitBtn").innerHTML = `Continue`;
-          }
-        })
-      // });
+      let choiceOptionList =  document.querySelectorAll(".choiceOption");
       document.getElementById("submitBtn").addEventListener("click", (e)=>{
         let anOptionNotSelected = true;
-        platfromOptionList.forEach(option => {
+        choiceOptionList.forEach(option => {
           if (option.selected) {
             anOptionNotSelected = false;
-            // console.log(`Value of selected option is ${option.value}`);
-            let linkforchoose = `choose/{{item}}/${option.value}/{{sw.id}}`;
-            let linkforGetKeyPage = `get_key/{{item}}/${option.value}/{{sw.id}}/Key`;
-            if (directlyGotoKeyPage) {
-              
-              loadPage(linkforGetKeyPage);
+            console.log(`Value of selected option is ${option.getAttribute("myvalue")}`);
+            let choice = option.getAttribute("myvalue");
+            let linkforkey = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}`;
+            let linkforCrack = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}`;
+            // let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
+            if (choice == "Key") {               
+                loadPage(linkforkey);      
             }
-            else{
-              loadPage(linkforchoose);
+            else if (choice == "Crack") {
+                // let linkforDownload = window.location.protocol + 
+                // window.open(linkforDownload, "_blank");
+                loadPage(linkforCrack);
+                // console.log(window.location.protocol)
+                // console.log(window.location.host)
+                // console.log(window.location.hostname)
             }
           }
         });
