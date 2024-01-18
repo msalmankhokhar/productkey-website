@@ -2,10 +2,11 @@ from flask import Flask, render_template, request, session, redirect, flash, sen
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin
-from random import randint
+from random import randint, choice
 from werkzeug.utils import secure_filename
 import json
 import os
+from util import generate_keysList
 
 app = Flask(__name__)
 app.secret_key = 'salmankhokhar'
@@ -23,10 +24,12 @@ cors = CORS(app, origins=allowed_websites)
 
 class Platfroms(database.Model):
     name = database.Column(database.String(100), primary_key=True, nullable=False)
+    valid_for = database.Column(database.String(100), unique=False, nullable=True)
 class Softwares(database.Model):
     id = database.Column(database.String(50), primary_key=True, nullable=False)
     name = database.Column(database.String, nullable=True, unique=True)
-    keys = database.Column(database.String(150), nullable=True, unique=False)
+    keys = database.Column(database.String, nullable=True, unique=False)
+    versions = database.Column(database.String, nullable=True, unique=False)
     platforms = database.Column(database.String(100), nullable=True, unique=False)
     cracks = database.Column(database.String(500), nullable=True, unique=False)
     imgSrc = database.Column(database.String, nullable=True, unique=False)
@@ -34,7 +37,8 @@ class Softwares(database.Model):
 class Games(database.Model):
     id = database.Column(database.String(50), primary_key=True, nullable=False)
     name = database.Column(database.String, nullable=True, unique=True)
-    keys = database.Column(database.String(150), nullable=True, unique=False)
+    keys = database.Column(database.String, nullable=True, unique=False)
+    versions = database.Column(database.String, nullable=True, unique=False)
     platforms = database.Column(database.String(100), nullable=True, unique=False)
     cracks = database.Column(database.String(500), nullable=True, unique=False)
     imgSrc = database.Column(database.String, nullable=True, unique=False)
@@ -48,11 +52,42 @@ class Games(database.Model):
 with app.app_context():
     database.create_all()
 
-def getPlatforms(software:Softwares):
+@app.route("/api/getPlatforms/<string:type>/<string:id>", methods=["GET"])
+def api_getPlatforms(type, id):
+    sw = Softwares.query.filter_by(id=id).first()
+    if type == "Game":
+        sw = Games.query.filter_by(id=id).first()
+    return json.loads(sw.platforms)
+
+@app.route("/api/getKeys/<string:type>/<string:id>", methods=["GET"])
+def api_getKeys(type, id):
+    sw = Softwares.query.filter_by(id=id).first()
+    if type == "Game":
+        sw = Games.query.filter_by(id=id).first()
+    return json.loads(sw.keys)
+
+@app.route("/api/getVersions/<string:type>/<string:id>", methods=["GET"])
+def api_getVersions(type, id):
+    sw = Softwares.query.filter_by(id=id).first()
+    if type == "Game":
+        sw = Games.query.filter_by(id=id).first()
+    return json.loads(sw.versions)
+
+@app.route("/api/getCracks/<string:type>/<string:id>", methods=["GET"])
+def api_getCracks(type, id):
+    sw = Softwares.query.filter_by(id=id).first()
+    if type == "Game":
+        sw = Games.query.filter_by(id=id).first()
+    return json.loads(sw.cracks)
+
+def getPlatforms(software):
     return json.loads(software.platforms)
-def getKeys(software:Softwares):
+def getKeys(software):
     return json.loads(software.keys)
-def getCracks(software:Softwares):
+def getVersions(software):
+    # print(f"software name is {software.name}")
+    return json.loads(software.versions)
+def getCracks(software):
     return json.loads(software.cracks)
 
 @app.route('/favicon.ico')
@@ -93,8 +128,8 @@ def return_key(item, platfrom, id):
     sw = Softwares.query.filter_by(id=id).first()
     if item == "Game":
         sw = Games.query.filter_by(id=id).first()
-    key = getKeys(sw)[platfrom]
-    data_json = { "key" : key }
+    keysList = getKeys(sw)[platfrom]
+    data_json = { "key" : choice(keysList) }
     return data_json
 
 @app.route("/", methods=["GET"])
@@ -116,8 +151,8 @@ def item(type, id):
     else:
         return "This software does not exist in our database"
     
-@app.route("/choose/<string:item>/<string:platform>/<string:id>", methods=["GET"])
-def choose(item, platform, id):
+@app.route("/choose/<string:item>/<string:platform>/<string:id>/<string:v>", methods=["GET"])
+def choose(item, platform, id, v):
     selected_software = Softwares.query.filter_by(id=id).first()
     if item == "Game":
         selected_software = Games.query.filter_by(id=id).first()
@@ -130,18 +165,18 @@ def choose(item, platform, id):
             available_choices = "Key"
         else:
             available_choices = "Crack"
-        return render_template("choose.html", sw=selected_software, item=item, platform=platform, available=available_choices)
+        return render_template("choose.html", sw=selected_software, item=item, platform=platform, available=available_choices, v=v)
     else:
         return "This software does not exist in our database"
     
-@app.route("/get_key/<string:item>/<string:platform>/<string:id>/<string:choice>", methods=["GET"])
-def getKey(item, platform, id, choice):
+@app.route("/get_key/<string:item>/<string:platform>/<string:id>/<string:choice>/<string:v>", methods=["GET"])
+def getKey(item, platform, id, choice, v):
     selected_software = Softwares.query.filter_by(id=id).first()
     if item == "Game":
         selected_software = Games.query.filter_by(id=id).first()
 
     if selected_software:
-        return render_template("getkey.html", sw=selected_software, item=item, platform=platform, choice=choice)
+        return render_template("getkey.html", sw=selected_software, item=item, platform=platform, choice=choice, v=v)
     else:
         return "This software does not exist in our database"
 
@@ -179,14 +214,14 @@ def admin_all_softwares(item):
                 softwaresList = Games.query.all()
                 currentNavlinkSpanText = "Games"
 
-            return render_template('admin/softwares.html', softwaresList=softwaresList, currentNavlinkSpanText=currentNavlinkSpanText, getPlatforms=getPlatforms, getKeys=getKeys, getCracks=getCracks, item=item)
+            return render_template('admin/softwares.html', softwaresList=softwaresList, currentNavlinkSpanText=currentNavlinkSpanText, getPlatforms=getPlatforms, getKeys=getKeys, getCracks=getCracks, item=item, getVersions=getVersions)
         else:
             return redirect("/admin/login")
 
 def generate_sw_ID():
     with app.app_context():
         while True:
-            id = randint(100000, 999999)
+            id = randint(1, 10000)
             print(f"generated sw id {id}")
             sw = Softwares.query.filter_by(id = id).first()
             if sw == None:
@@ -228,31 +263,33 @@ def admin_add_new_movie(item):
 
         # PlatformList = [platformValue_dict[key] for key in platformValue_dict if request.form.get(key) == "on"]
         PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
-        keys = { key : request.form.get(f"keyfor{key}") for key in PlatformList }
-        print(keys)
-        cracks = {}
+        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList }
+        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList }
+        cracks = [ pf.name for pf in all_db_platforms if request.form.get(f"crackfor{pf.name}") == "on" ]
+        # print(keys)
         #uploading crack files:
-        for platform in PlatformList:
-            file = request.files[f"filefor{platform}"]
-            if file:
-                save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", id, platform)
-                if not os.path.exists(save_directory):
-                    os.makedirs(save_directory, exist_ok=True)
-                file_extention = os.path.splitext(file.filename)[1]
-                allowed_extentions = [".zip", ".rar"]
-                if file_extention in allowed_extentions:
-                    print(f"name is {name}")
-                    filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
-                    finalFilePath = os.path.join(save_directory, filename)
-                    file.save(finalFilePath)
-                    cracks[platform] = filename
+        # for platform in PlatformList:
+        #     file = request.files[f"filefor{platform}"]
+        #     if file:
+        #         save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", id, platform)
+        #         if not os.path.exists(save_directory):
+        #             os.makedirs(save_directory, exist_ok=True)
+        #         file_extention = os.path.splitext(file.filename)[1]
+        #         allowed_extentions = [".zip", ".rar"]
+        #         if file_extention in allowed_extentions:
+        #             print(f"name is {name}")
+        #             filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
+        #             finalFilePath = os.path.join(save_directory, filename)
+        #             file.save(finalFilePath)
+        #             cracks[platform] = filename
 
         if item == "Software":            
             software = Softwares(
                 id = id,
                 name = name,
                 imgSrc = imgSrc,
-                desc = desc,
+                # desc = desc,
+                versions = json.dumps(versions),
                 keys = json.dumps(keys),
                 platforms = json.dumps(PlatformList),
                 cracks = json.dumps(cracks)
@@ -262,7 +299,8 @@ def admin_add_new_movie(item):
                 id = id,
                 name = name,
                 imgSrc = imgSrc,
-                desc = desc,
+                # desc = desc,
+                versions = json.dumps(versions),
                 keys = json.dumps(keys),
                 platforms = json.dumps(PlatformList),
                 cracks = json.dumps(cracks)
@@ -271,17 +309,19 @@ def admin_add_new_movie(item):
         database.session.add(software)
         try:
             database.session.commit()
-            flash(f"{name} added successfull in the database")
+            flash(f"<strong>{name}</strong> added successfull in the database")
             print(f"{name} added successfull in the database")
         except Exception as e:
             flash(str(e))
         return redirect(f"/admin/all/{item}")
 
-def getPlatformsText(software:Softwares):
+def getPlatformsText(software):
     return software.platforms
-def getKeysText(software:Softwares):
+def getKeysText(software):
     return software.keys
-def getCracksText(software:Softwares):
+def getVersionsText(software):
+    return software.versions
+def getCracksText(software):
     return software.cracks
 
 @app.route("/admin/edit/<string:item>/<string:Id>", methods=["GET", "POST"])
@@ -299,7 +339,7 @@ def admin_edit_software(item, Id):
     if request.method == "GET":
         if "adminuser" in session:
             if sw:
-                return render_template('admin/edit_software.html', sw=sw, getCracksText=getCracksText, getKeysText=getKeysText, getPlatformsText=getPlatformsText, item=item, all_db_platforms=all_db_platforms)
+                return render_template('admin/edit_software.html', sw=sw, getCracksText=getCracksText, getKeysText=getKeysText, getPlatformsText=getPlatformsText, item=item, all_db_platforms=all_db_platforms, getVersionsText=getVersionsText)
             else:
                 return "No software with this ID"
         else:
@@ -310,36 +350,38 @@ def admin_edit_software(item, Id):
         desc = request.form.get('desc')
 
         PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
-        keys = { key : request.form.get(f"keyfor{key}") for key in PlatformList }
-        print(keys)
-        cracks = {}
+        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList }
+        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList }
+        cracks = [ pf.name for pf in all_db_platforms if request.form.get(f"crackfor{pf.name}") == "on" ]
+        # print(keys)
         #uploading crack files:
-        for platform in PlatformList:
-            file = request.files[f"filefor{platform}"]
-            if file:
-                save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", Id, platform)
-                if not os.path.exists(save_directory):
-                    os.makedirs(save_directory, exist_ok=True)
-                file_extention = os.path.splitext(file.filename)[1]
-                allowed_extentions = [".zip", ".rar"]
-                if file_extention in allowed_extentions:
-                    print(f"name is {name}")
-                    filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
-                    finalFilePath = os.path.join(save_directory, filename)
-                    file.save(finalFilePath)
-                    cracks[platform] = filename
+        # for platform in PlatformList:
+        #     file = request.files[f"filefor{platform}"]
+        #     if file:
+        #         save_directory = os.path.join(UPLOAD_FOLDER, "Cracks", Id, platform)
+        #         if not os.path.exists(save_directory):
+        #             os.makedirs(save_directory, exist_ok=True)
+        #         file_extention = os.path.splitext(file.filename)[1]
+        #         allowed_extentions = [".zip", ".rar"]
+        #         if file_extention in allowed_extentions:
+        #             print(f"name is {name}")
+        #             filename = secure_filename(f"{name.replace(' ', '_')}-{platform}" + file_extention)
+        #             finalFilePath = os.path.join(save_directory, filename)
+        #             file.save(finalFilePath)
+        #             cracks[platform] = filename
 
         sw.name = name
         sw.imgSrc = imgSrc
-        sw.desc = desc
+        # sw.desc = desc
         sw.keys = json.dumps(keys)
         sw.platforms = json.dumps(PlatformList)
+        sw.versions = json.dumps(versions)
         if len(cracks) > 0:
             sw.cracks = json.dumps(cracks)
 
         try:
             database.session.commit()
-            flash(f"{name} updated successfully in the database")
+            flash(f"<strong>{name}</strong> updated successfully in the database")
             print(f"{name} updated successfully in the database")
         except Exception as e:
             flash(str(e))

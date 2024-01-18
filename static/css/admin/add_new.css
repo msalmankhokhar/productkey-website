@@ -1,0 +1,33 @@
+
+.keyBox, .vBox{
+    box-shadow: 1px 1px 7px rgb(170, 170, 170);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0px;
+    width: fit-content;
+}
+
+#backBtn *{
+    color: white;
+}
+#backBtn{
+    text-decoration: none;
+    background-color: rgb(44, 44, 44);
+    border-radius: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 100%;
+}
+.div-keyinputfor{
+}
+/* .keyBoxContainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    column-gap: 5px;
+}
+.keyBoxContainer div{
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+} */

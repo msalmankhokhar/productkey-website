@@ -21,7 +21,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
     *{
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      /* font-family: 'Poppins', sans-serif; */
     }
     
     body{
@@ -143,7 +143,7 @@
       <div id="contentWrapper">
         <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
         {% if available == "both" %}
-        <p id="desc" style="font-size: 1.2rem;">Both key and crack of <strong>{{sw.name}}</strong> are available for {{platform}}</p>
+        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack of <strong>{{sw.name}}</strong> for version {{v}} {{platform}}</p>
         <select class="form-select form-select-lg mb-3" aria-label="Large select example">
             <option selected>Choose an option</option>
             <option class="choiceOption" myvalue="Key">Key</option>
@@ -151,22 +151,28 @@
         </select>
         <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
           Continue
-          <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i>
+          <!-- <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i> -->
         </button>
         {% else %}
-        <p id="desc" style="font-size: 1.2rem;">{{available}} of <strong>{{sw.name}}</strong> is available for {{platform}}</p>
+        <p id="desc" style="font-size: 1.2rem;" class="text-center">{{available}} of <strong>{{sw.name}}</strong> is available for {{platform}}</p>
         <select class="form-select form-select-lg mb-3" aria-label="Large select example" style="display: none;">
             <option>Choose an option</option>
             <option selected class="choiceOption" myvalue="{{available}}">{{available}}</option>
         </select>
-        <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
+        <button id="submitBtn" class="mybtn" style="cursor: pointer;">
           Get {{available}}
           <!-- <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i> -->
         </button>
         {% endif %}
         
         </div>
-        
+        <footer>
+          <div id="footerContent">
+            <a href="/Disclaimer/index.html" class="footerLink">Disclaimer</a>
+            <a href="/Contact/index.html" class="footerLink">Contact Us</a>
+          </div>
+          <div id="CR" class="text-center">Keey.es &copy; 2024 - All Rights Reserved</div>
+        </footer> 
     </div>
     </body>
     <!-- <script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script> -->
@@ -179,8 +185,8 @@
             anOptionNotSelected = false;
             console.log(`Value of selected option is ${option.getAttribute("myvalue")}`);
             let choice = option.getAttribute("myvalue");
-            let linkforkey = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}`;
-            let linkforCrack = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}`;
+            let linkforkey = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}/{{v}}`;
+            let linkforCrack = `get_key/{{item}}/{{platform}}/{{sw.id}}/${choice}/{{v}}`;
             // let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
             if (choice == "Key") {               
                 loadPage(linkforkey);      
@@ -196,7 +202,7 @@
           }
         });
         if (anOptionNotSelected) {
-          window.alert("Please select your platform / OS")         
+          window.alert("Please choose an option");
         }
       })
     </script>

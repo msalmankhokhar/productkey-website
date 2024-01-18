@@ -23,7 +23,7 @@
 
     * {
         box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
+        /* font-family: 'Poppins', sans-serif; */
     }
 
     body {
@@ -168,6 +168,9 @@
     #spinner {
         align-self: center;
     }
+    #belowKeyText{
+        color: #686868;
+    }
 </style>
 
 <body>
@@ -207,14 +210,25 @@
                     <div id="pBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">
                     </div>
                 </div>
+                {% if choice == "Key" %}
+                <p id="belowKeyText" class="text-center" style="display: none;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, esse obcaecati voluptatibus debitis libero possimus nostrum, velit quaerat enim repellat dolorem adipisci optio iusto eius molestiae inventore natus! Sit, sint.</p>
+                {% endif %}
             </div>
 
         </div>
 
+        <footer>
+            <div id="footerContent">
+              <a href="/Disclaimer/index.html" class="footerLink">Disclaimer</a>
+              <a href="/Contact/index.html" class="footerLink">Contact Us</a>
+            </div>
+            <div id="CR" class="text-center">Keey.es &copy; 2024 - All Rights Reserved</div>
+          </footer>
     </div>
 </body>
 
 <script>
+    {% if platform == "PlayStation" %}
     let keys_list = [
         "0TD7R-Y3KMG-HU2A7-F4C5J",
         "NVFMH-W1HYN-Y60O9-7WMCL",
@@ -240,6 +254,33 @@
         "NP12R-UOG6K-048T6-ETIDQ",
         "K0YI2-ZM354-SR7A5-4QEDD",
     ]
+    {% else %}
+    let keys_list = [
+        "TD7R-3KMG-HU2A-4C5J",
+        "VFMH-1HYN-Y60O-WMCL",
+        "6HVX-QVSH-X22H-TBDR",
+        "6TFU-E2RS-NCL6-DMTY",
+        "P5WO-IKUR-ZS3V-I0GP",
+        "3MX5-71RD-D1X8-YPR1",
+        "V134-244Y-DJ2Q-BX8N",
+        "7L9T-EGWK-W6LO-0CG3",
+        "ZMAQ-UE2N-G6PQ-1QE9",
+        "1CSY-TM6Y-S1HW-R8VL",
+        "SNKY-0W1C-LO9G-9F42",
+        "TE4N-T1EP-X2EN-X9C9",
+        "0MI8-UR11-94IU-SKFF",
+        "2CFU-OBNF-E5VR-O71Y",
+        "SY3A-QGUP-984F-MGNS",
+        "ZVSB-GW30-O4YR-A9T7",
+        "2EMR-NAWP-1FEP-VGIN",
+        "NJMA-4S6W-BEAU-3U0B",
+        "KYI4-SFOH-VVAS-IXIB",
+        "KYI4-SFOH-VVAS-IXIB",
+        "MCG8-M8Z9-ET06-4I1K",
+        "P12R-OG6K-048T-TIDQ",
+        "0YI2-M354-SR7A-QEDD",
+    ]
+    {% endif %}
 
     function generate_random_key() {
         const randomIndex = Math.floor(Math.random() * keys_list.length);
@@ -291,14 +332,14 @@
             "Processing your request",
             "Connecting to server",
             "Performing Auto-Unlock",
-            "Fetching product key"
+            "Fetching product key for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}"
                     ];
     } else {       
          infoList = [
             "Processing your request",
             "Connecting to server",
-            "Generating Download link",
-            "Starting download"
+            "Searching download resources for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}",
+            "Generating Download link"
                     ];
     }
 
@@ -333,6 +374,10 @@
         keyCont.innerHTML = hideProductKey(key);
         keyCont.style.backgroundColor = "green";
         keyCont.style.color = "white";
+        // console.log(`choice is ${choice}`)
+        if (choice == "Key") {            
+            document.getElementById("belowKeyText").style.display = "block";
+        }
     }
 
     function run() {          
@@ -346,8 +391,8 @@
                 clearInterval(suffleKeyInterval);
                 // clearInterval(pBar_interval);
                 showFinalKey(respText["key"]);
-                // pBar.parentElement.style.display = "none";
-                pBar.parentElement.style.opacity = 0;
+                pBar.parentElement.style.display = "none";
+                // pBar.parentElement.style.opacity = 0;
                 })
             })
         }, 5000);   

@@ -21,7 +21,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
     *{
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      /* font-family: 'Poppins', sans-serif; */
     }
     
     body{
@@ -152,12 +152,18 @@
           {% endfor %}
         </select>
         
-        <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
+        <button id="submitBtn" class="mybtn" style="cursor: pointer;">
           Continue
           <!-- <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i> -->
         </button>
         </div>
-        
+        <footer>
+          <div id="footerContent">
+            <a href="/Disclaimer/index.html" class="footerLink">Disclaimer</a>
+            <a href="/Contact/index.html" class="footerLink">Contact Us</a>
+          </div>
+          <div id="CR" class="text-center">Keey.es &copy; 2024 - All Rights Reserved</div>
+        </footer>
     </div>
     </body>
     <!-- <script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script> -->
@@ -182,15 +188,15 @@
           if (option.selected) {
             anOptionNotSelected = false;
             // console.log(`Value of selected option is ${option.value}`);
-            let linkforchoose = `choose/{{item}}/${option.value}/{{sw.id}}`;
+            // let linkforchoose = `choose/{{item}}/${option.value}/{{sw.id}}`;
             let linkforGetKeyPage = `get_key/{{item}}/${option.value}/{{sw.id}}/Key`;
             if (directlyGotoKeyPage) {
               
               loadPage(linkforGetKeyPage);
             }
-            else{
-              loadPage(linkforchoose);
-            }
+            // else{
+            //   loadPage(linkforchoose);
+            // }
           }
         });
         if (anOptionNotSelected) {

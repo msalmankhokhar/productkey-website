@@ -194,6 +194,17 @@ th, td{
     min-width: 195px;
 }
 
+td.col{
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
+}
+
+table.bordered th, table.bordered td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
 table.mytable td.btnsTd{
     display: flex;
     flex-direction: row;

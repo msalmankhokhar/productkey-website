@@ -7,10 +7,15 @@
     <title>{% block title %}Add New Software{% endblock title %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/admin/add_new.css">
 </head>
 
 <body>
     <div class="container my-3">
+        <a type="button" id="backBtn" href="/admin/all/{{item}}">
+            <i class="fa-solid fa-arrow-left"></i>
+            <!-- <span style="margin-left: 10px;">Cancel</span> -->
+        </a>
         {% block main %}
         <h1>Add new {{item}}</h1>
         <form action="" method="post" enctype="multipart/form-data" id="form">
@@ -22,6 +27,7 @@
             <div class="mb-3">
                 <label for="">Platforms available</label>
                 {% for pf in all_db_platforms %}
+                {% if item in pf.valid_for %}
                 <div class="form-check form-switch m-1">
                     <input class="form-check-input platformInput" type="checkbox" role="switch"
                         id="flexSwitchCheckChecked" name="platform{{pf.name}}" myvalue="{{pf.name}}">
@@ -33,24 +39,40 @@
                             <input class="form-check-input forInput {{pf.name}}" type="checkbox" role="switch"
                                 id="flexSwitchCheckChecked" name="for{{pf.name}}" platform="{{pf.name}}">
                             <label class="form-check-label" for="flexSwitchCheckChecked">Key</label>
-                            <div class="mb-3" id="div-keyinputfor{{pf.name}}" style="display: none;">
+                            <div class="mb-3" id="div-keyinputfor{{pf.name}}" style="display: none;" class="div-keyinputfor">
+
+                                <div id="keyBoxContainer{{pf.name}}" class="keyBoxContainer">
+
+                                </div>
+
                                 <label for="nameInput" class="form-label">Key for {{pf.name}}</label>
-                                <input type="text" class="form-control requiredInput" id="keyinputfor{{pf.name}}"
+                                <input type="hidden" class="form-control" id="keyinputfor{{pf.name}}"
                                     name="keyfor{{pf.name}}">
+                                <input id="keyinputSmallfor{{pf.name}}" type="text" class="form-control requiredInput mx-1" style="width: auto; display: inline;">
+                                <button type="button" class="btn btn-primary addKeyBtn" platform="{{pf.name}}" kind="key">Add Key</button>
+                                
+                                <div id="vBoxContainer{{pf.name}}" class="vBoxContainer">
+                                </div>
+                                <label for="nameInput" class="form-label">Version for {{pf.name}}</label>
+                                <input type="hidden" class="form-control" id="vinputfor{{pf.name}}" name="vfor{{pf.name}}">
+                                <input id="vinputSmallfor{{pf.name}}" type="text" class="form-control requiredInput mx-1" style="width: auto; display: inline;">
+                                <button type="button" class="btn btn-primary addKeyBtn" platform="{{pf.name}}" kind="v">Add Version</button>
+
                             </div>
                         </div>
                         <div class="form-check form-switch m-1">
                             <input class="form-check-input forInputCrack {{pf.name}}" type="checkbox" role="switch"
                                 id="flexSwitchCheckChecked" name="crackfor{{pf.name}}" platform="{{pf.name}}">
                             <label class="form-check-label" for="flexSwitchCheckChecked">Crack</label>
-                            <div class="mb-3" id="div-fileinputfor{{pf.name}}" style="display: none;">
+                            <!-- <div class="mb-3" id="div-fileinputfor{{pf.name}}" style="display: none;">
                                 <label for="formFile" class="form-label">Upload .zip file</label>
                                 <input class="form-control requiredInput" type="file" id="fileinputfor{{pf.name}}"
                                     name="filefor{{pf.name}}">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
                 <!-- <div class="form-check form-switch m-1">
                     <input class="form-check-input platformInput" type="checkbox" role="switch"
@@ -154,11 +176,11 @@
                 <label for="iconInput" class="form-label">Icon Link</label>
                 <input type="text" class="form-control requiredInput" id="iconInput" name="imgSrc" required>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="descInput" class="form-label">Description</label>
                 <textarea class="form-control requiredInput" id="descInput" rows="3" name="desc" required></textarea>
-            </div>
-            <button id="submitBtn" type="button">Submit</button>
+            </div> -->
+            <button id="submitBtn" type="button" class="btn btn-primary">Submit</button>
         </form>
         {% endblock main %}
     </div>
@@ -167,6 +189,7 @@
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/7d3f73a100.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/add_new.js"></script>
 <script>
     let platformInputs = document.querySelectorAll(".platformInput");
     let forInputs = document.querySelectorAll(".forInput");
@@ -188,11 +211,11 @@
         input.addEventListener("change", (e) => {
             if (input.checked) {
                 document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "block";
-                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).required = true;
+                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).required = true;
             }
             else {
                 document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "none";
-                document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).required = true;
+                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).required = true;
             }
         })
     });
@@ -201,11 +224,11 @@
         input.addEventListener("change", (e) => {
             if (input.checked) {
                 document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "block";
-                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).required = true;
+                // document.getElementById(`fileinputfor${input.getAttribute("platform")}`).required = true;
             }
             else {
                 document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "none";
-                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).required = true;
+                // document.getElementById(`fileinputfor${input.getAttribute("platform")}`).required = true;
             }
         })
     });
@@ -250,7 +273,7 @@
 
     function validateRequiredInputs() {
         let response = true;
-        let requiredInputsArray = Array.from(requiredInputs);
+        let requiredInputsArray = Array.from(document.querySelectorAll(".requiredInput"));
         requiredInputsArray.reverse();
         requiredInputsArray.forEach(element => {
             if (!(element.checkValidity())) {
