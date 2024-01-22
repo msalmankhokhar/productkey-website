@@ -340,7 +340,11 @@
          infoList = [
             "Processing your request",
             "Connecting to server",
+            {% if item == "Game" %}
+            "Searching download resources for <strong>{{sw.name}}</strong> {{v}} Edition {{platform}}",
+            {% else %}
             "Searching download resources for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}",
+            {% endif %}
             "Generating Download link"
                     ];
     }
