@@ -21,7 +21,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
     *{
       box-sizing: border-box;
-      /* font-family: 'Poppins', sans-serif; */
+      font-family: 'Poppins', sans-serif;
     }
     
     body{
@@ -143,7 +143,11 @@
       <div id="contentWrapper">
         <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
         {% if available == "both" %}
-        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack of <strong>{{sw.name}}</strong> for version {{v}} {{platform}}</p>
+        {% if {{item}} == "Game" %}
+        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong> version {{v}} {{platform}}</p>
+        {% else %}
+        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong> {{v}} edition {{platform}}</p>
+        {% endif %}
         <select class="form-select form-select-lg mb-3" aria-label="Large select example">
             <option selected>Choose an option</option>
             <option class="choiceOption" myvalue="Key">Key</option>
@@ -206,5 +210,48 @@
         }
       })
     </script>
+
+<script>
+  // let suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
+  function showToast(sw_name) {
+    let name;
+    if (sw_name) {
+      name = sw_name
+    } else {
+      let index = Math.floor(Math.random() * suggestions.length);
+      name = suggestions[index];
+    }
+    
+    let software_ID = id_dict[name][0];
+    let type = id_dict[name][2];
+    let msgList = [ "Key", "Download link" ]
+    let toast = document.createElement("div");
+    
+    toast.setAttribute("id", "toast")
+    toast.setAttribute("data-aos", "fade-down")
+    toast.setAttribute("role", "alert")
+    toast.setAttribute("aria-live", "assertive")
+    toast.setAttribute("aria-atomic", true)
+   
+    toast.classList.add("toast", "show")
+    toast.innerHTML = `
+    <div style="display: flex; align-items: center;" class="toast-header">
+      <img src="https://image.similarpng.com/very-thumbnail/2020/08/Illustration-of-light-bulb-icon-on-transparent-background-PNG.png" class="rounded me-2" alt="icon" width="20">
+      <strong class="me-auto">Notification</strong>
+      <small>${Math.floor(Math.random() * 15)} mins ago</small>
+    </div>
+    <div class="toast-body">
+      Someone generated ${msgList[Math.floor(Math.random() * msgList.length)]} for <strong>${name}</strong>
+    </div>
+    `
+    // `id="toast" class="toast show" data-aos="fade-down" role="alert" aria-live="assertive" aria-atomic="true"`
+    document.body.appendChild(toast)
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 5000);
+  }
+  
+  let toastInterval = setInterval(showToast, 10000);
+  </script>
     
     </html>

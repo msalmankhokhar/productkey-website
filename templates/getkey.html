@@ -23,7 +23,7 @@
 
     * {
         box-sizing: border-box;
-        /* font-family: 'Poppins', sans-serif; */
+        font-family: 'Poppins', sans-serif;
     }
 
     body {
@@ -210,9 +210,7 @@
                     <div id="pBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">
                     </div>
                 </div>
-                {% if choice == "Key" %}
                 <p id="belowKeyText" class="text-center" style="display: none;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, esse obcaecati voluptatibus debitis libero possimus nostrum, velit quaerat enim repellat dolorem adipisci optio iusto eius molestiae inventore natus! Sit, sint.</p>
-                {% endif %}
             </div>
 
         </div>
@@ -332,7 +330,11 @@
             "Processing your request",
             "Connecting to server",
             "Performing Auto-Unlock",
+            {% if {{item}} == "Game" %}
+            "Fetching product key for <strong>{{sw.name}}</strong> {{v}} Edition {{platform}}"
+            {% else %}
             "Fetching product key for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}"
+            {% endif %}
                     ];
     } else {       
          infoList = [
@@ -359,10 +361,17 @@
             clearInterval(pBar_interval);
             if (choice == "Crack") {
             let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
-            startDownload(linkforDownload);
+            // startDownload(linkforDownload);
             pBar.parentElement.style.opacity = 0;
             spinner.style.display = "none";
-            info.innerHTML = "Thanks for your download !";
+            info.innerHTML = "Your download is ready. Follow the instructions to unlock your download";
+            keyCont.innerText = "Unlock your download";
+            keyCont.classList.add("animate__animated", "animate__pulse", "animate__infinite");
+            keyCont.style.backgroundColor = "green";
+            keyCont.style.color = "white";
+            keyCont.style.display = "block";
+            keyCont.style.cursor = "pointer";
+            document.getElementById("belowKeyText").style.display = "block";
             }   
         }
     }, 100);
@@ -375,9 +384,9 @@
         keyCont.style.backgroundColor = "green";
         keyCont.style.color = "white";
         // console.log(`choice is ${choice}`)
-        if (choice == "Key") {            
+        // if (choice == "Key") {            
             document.getElementById("belowKeyText").style.display = "block";
-        }
+        // }
     }
 
     function run() {          
@@ -416,5 +425,48 @@
     let updateInfoInterval = setInterval(updateInfo, 2000);
 
 </script>
+
+<script>
+    let suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
+    function showToast(sw_name) {
+      let name;
+      if (sw_name) {
+        name = sw_name
+      } else {
+        let index = Math.floor(Math.random() * suggestions.length);
+        name = suggestions[index];
+      }
+      
+      let software_ID = id_dict[name][0];
+      let type = id_dict[name][2];
+      let msgList = [ "Key", "Download link" ]
+      let toast = document.createElement("div");
+      
+      toast.setAttribute("id", "toast")
+      toast.setAttribute("data-aos", "fade-down")
+      toast.setAttribute("role", "alert")
+      toast.setAttribute("aria-live", "assertive")
+      toast.setAttribute("aria-atomic", true)
+     
+      toast.classList.add("toast", "show")
+      toast.innerHTML = `
+      <div style="display: flex; align-items: center;" class="toast-header">
+        <img src="https://image.similarpng.com/very-thumbnail/2020/08/Illustration-of-light-bulb-icon-on-transparent-background-PNG.png" class="rounded me-2" alt="icon" width="20">
+        <strong class="me-auto">Notification</strong>
+        <small>${Math.floor(Math.random() * 15)} mins ago</small>
+      </div>
+      <div class="toast-body">
+        Someone generated ${msgList[Math.floor(Math.random() * msgList.length)]} for <strong>${name}</strong>
+      </div>
+      `
+      // `id="toast" class="toast show" data-aos="fade-down" role="alert" aria-live="assertive" aria-atomic="true"`
+      document.body.appendChild(toast)
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 5000);
+    }
+    
+    let toastInterval = setInterval(showToast, 10000);
+    </script>
 
 </html>
