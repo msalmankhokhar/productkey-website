@@ -153,6 +153,8 @@ def item(type, id):
 @app.route("/choose/<string:item>/<string:platform>/<string:id>/<string:v>", methods=["GET"])
 def choose(item, platform, id, v):
     selected_software = Softwares.query.filter_by(id=id).first()
+    if v == "none":
+        v = "Standard"
     if item == "Game":
         selected_software = Games.query.filter_by(id=id).first()
     if selected_software:
@@ -171,6 +173,8 @@ def choose(item, platform, id, v):
 @app.route("/get_key/<string:item>/<string:platform>/<string:id>/<string:choice>/<string:v>", methods=["GET"])
 def getKey(item, platform, id, choice, v):
     selected_software = Softwares.query.filter_by(id=id).first()
+    if v == "none":
+        v = "Standard"
     if item == "Game":
         selected_software = Games.query.filter_by(id=id).first()
 
@@ -262,8 +266,8 @@ def admin_add_new_movie(item):
 
         # PlatformList = [platformValue_dict[key] for key in platformValue_dict if request.form.get(key) == "on"]
         PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
-        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList }
-        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList }
+        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList if request.form.get(f"keyfor{key}") != "" }
+        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList if request.form.get(f"vfor{key}") != "" }
         cracks = [ pf.name for pf in all_db_platforms if request.form.get(f"crackfor{pf.name}") == "on" ]
         # print(keys)
         #uploading crack files:
@@ -349,9 +353,11 @@ def admin_edit_software(item, Id):
         desc = request.form.get('desc')
 
         PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
-        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList }
-        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList }
+        keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList if request.form.get(f"keyfor{key}") != "" }
+        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList if request.form.get(f"vfor{key}") != "" }
         cracks = [ pf.name for pf in all_db_platforms if request.form.get(f"crackfor{pf.name}") == "on" ]
+
+        print(versions)
         # print(keys)
         #uploading crack files:
         # for platform in PlatformList:

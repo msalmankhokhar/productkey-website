@@ -154,18 +154,23 @@
             if (Object.keys(checkedKeyInputs).includes(element.getAttribute("myvalue"))) {
                 document.getElementById(`forInput${element.getAttribute("myvalue")}`).checked = true;
                 document.getElementById(`div-keyinputfor${element.getAttribute("myvalue")}`).style.display = "block";
-                let number_of_keys = document.querySelectorAll(`#keyBoxContainer${element.getAttribute("myvalue")} div`).length;
-                if (number_of_keys > 0) {       
+                // let number_of_keys = document.querySelectorAll(`#keyBoxContainer${element.getAttribute("myvalue")} div`).length;
+                let keyTextList = checkedKeyInputs[element.getAttribute("myvalue")];
+                let number_of_keys = keyTextList.length;
+                if (number_of_keys < 1) {       
                     document.getElementById(`keyinputSmallfor${element.getAttribute("myvalue")}`).required = true;
                 }
                 // let keyBoxContainer_ID = `keyBoxContainer${element.getAttribute("myvalue")}`;
-                let keyTextList = checkedKeyInputs[element.getAttribute("myvalue")];
                 keyTextList.forEach(keyText => {
                     addkey(keyText, element.getAttribute("myvalue"), "key");
                 });
             }
             if (Object.keys(checkedVersionsInputs).includes(element.getAttribute("myvalue"))) {
                 let keyTextList = checkedVersionsInputs[element.getAttribute("myvalue")];
+                let number_of_keys = keyTextList.length;
+                // if (number_of_keys < 1) {
+                //     document.getElementById(`vinputSmallfor${element.getAttribute("myvalue")}`).required = true;
+                // }
                 keyTextList.forEach(keyText => {
                     addkey(keyText, element.getAttribute("myvalue"), "v");
                 });

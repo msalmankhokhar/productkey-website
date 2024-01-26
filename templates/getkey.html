@@ -330,20 +330,30 @@
             "Processing your request",
             "Connecting to server",
             "Performing Auto-Unlock",
-            {% if item == "Game" %}
-            "Fetching product key for <strong>{{sw.name}}</strong> {{v}} Edition {{platform}}"
+            {% if v == None %}
+                {% set default_v = "Standard" %}
             {% else %}
-            "Fetching product key for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}"
+                {% set default_v = v %}
+            {% endif %}
+            {% if item == "Game" %}
+            "Fetching product key for <strong>{{sw.name}}</strong> {{default_v}} Edition {{platform}}"
+            {% else %}
+            "Fetching product key for <strong>{{sw.name}}</strong> Version {{default_v}} {{platform}}"
             {% endif %}
                     ];
     } else {       
          infoList = [
             "Processing your request",
             "Connecting to server",
-            {% if item == "Game" %}
-            "Searching download resources for <strong>{{sw.name}}</strong> {{v}} Edition {{platform}}",
+            {% if v == None %}
+                {% set default_v = "Standard" %}
             {% else %}
-            "Searching download resources for <strong>{{sw.name}}</strong> Version {{v}} {{platform}}",
+                {% set default_v = v %}
+            {% endif %}
+            {% if item == "Game" %}
+            "Searching download resources for <strong>{{sw.name}}</strong> {{default_v}} Edition {{platform}}",
+            {% else %}
+            "Searching download resources for <strong>{{sw.name}}</strong> Version {{default_v}} {{platform}}",
             {% endif %}
             "Generating Download link"
                     ];

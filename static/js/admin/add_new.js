@@ -31,15 +31,17 @@ function addkey(keyText, platform, kind){
 
 function delKey(btn){
     let keyText = btn.previousElementSibling.innerText + ",";
+    console.log(`key text to remove is < ${keyText} >`)
     let keyInput = btn.parentElement.parentElement.nextElementSibling.nextElementSibling;
+    console.log("key input is"); console.log(keyInput);
     let keyInputSmall = btn.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling;
     keyInput.value = removeSubstring(keyInput.value, keyText);
     let keysContainer = btn.parentElement.parentElement;
     keysContainer.removeChild(btn.parentElement);
     console.log(`${keysContainer.children.length} childs inside keysContainer`);
     if (keysContainer.children.length == 0) {
-        keyInputSmall.required = true;
-        keyInputSmall.classList.add("requiredInput");
+        // keyInputSmall.required = true;
+        // keyInputSmall.classList.add("requiredInput");
         console.log("set keyIput required att. true")
     }
 }
