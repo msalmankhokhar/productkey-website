@@ -162,7 +162,7 @@ def choose(item, platform, id, v):
         cracks = getCracks(selected_software)
         if platform in keys and platform in cracks:
             available_choices = "both"
-        elif keys[platform]:
+        elif keys.get(platform):
             available_choices = "Key"
         else:
             available_choices = "Crack"
@@ -267,7 +267,7 @@ def admin_add_new_movie(item):
         # PlatformList = [platformValue_dict[key] for key in platformValue_dict if request.form.get(key) == "on"]
         PlatformList = [pf.name for pf in all_db_platforms if request.form.get(f"platform{pf.name}") == "on"]
         keys = { key : generate_keysList(request.form.get(f"keyfor{key}")) for key in PlatformList if request.form.get(f"keyfor{key}") != "" }
-        versions = { key : generate_keysList(request.form.get(f"vfor{key}")) for key in PlatformList if request.form.get(f"vfor{key}") != "" }
+        versions = { pf : generate_keysList(request.form.get(f"vfor{pf}")) for pf in PlatformList if request.form.get(f"vfor{pf}") != "" }
         cracks = [ pf.name for pf in all_db_platforms if request.form.get(f"crackfor{pf.name}") == "on" ]
         # print(keys)
         #uploading crack files:
