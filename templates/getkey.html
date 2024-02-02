@@ -221,16 +221,16 @@
                     <div id="pBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">
                     </div>
                 </div>
-                <p id="belowKeyText" class="text-center my-3">Please wait while your key is being generated...</p>
+                <p id="belowKeyText" class="text-center my-3">Please wait while your {{choice}} is being generated...</p>
                 <div class="verifynow my-3" id="verifymsg">
                     <p>As you know we're providing this service <strong>absolutely free of cost</strong> and this is only made possible because of our valuable sponsors who sponsor us for the paid keys that we provide to you. <br><br>
                     So please complete one of the offers (or install an app) from our sponsors by clicking the button below which will help us to keep this service alive. You can read more about completing an offer <strong><a href="/FAQs/" target="_blank">HERE</a></strong>.</p>
                     <a href="#" id="verifyBtn"><button class="finalbtn my-4 w-75">↪ Complete Final Step</button></a>
-                    <p>After successful completion, system will automatically reveal the full key / crack link.</p>
+                    <p>After successful completion, system will automatically reveal the full {{choice}} {% if choice == "Crack" %}link{% endif %}</p>
                 </div>
                 <div id="myIframe" style="display: none;">
                       <iframe src="https://www.dailymotion.com/embed/video/x8n55bs" height="360px" marginwidth="0" marginheight="0" align="middle" frameborder="0" width="100%"></iframe><br><br>
-                      <p style="font-size: 1rem;">After successful completion, system will automatically reveal the full key / crack link.</p>
+                      <p style="font-size: 1rem;">After successful completion, system will automatically reveal the full {{choice}} {% if choice == "Crack" %}link{% endif %}.</p>
                 </div>
             </div>
 
@@ -459,7 +459,10 @@
     }
 
     let currentIndex = 0;
-    let updateInfoInterval = setInterval(updateInfo, 2000);
+    let updateInfoInterval;
+    updateInfoInterval = setInterval(updateInfo, 2000);
+    // setTimeout(() => {       
+    // }, 4000);
 
 </script>
 
@@ -500,6 +503,10 @@
       document.body.appendChild(toast)
       setTimeout(() => {
         document.body.removeChild(toast);
+        if (toastInterval) {
+        clearInterval(toastInterval);
+      }
+        setInterval(showToast, 15000);
       }, 5000);
     }
     </script>

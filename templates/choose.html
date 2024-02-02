@@ -238,6 +238,10 @@
     document.body.appendChild(toast)
     setTimeout(() => {
       document.body.removeChild(toast);
+      if (toastInterval) {
+        clearInterval(toastInterval);
+      }
+      setInterval(showToast, 15000);
     }, 5000);
   }
   </script>

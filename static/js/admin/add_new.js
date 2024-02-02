@@ -3,6 +3,9 @@ let addKeyBtns = document.querySelectorAll(".addKeyBtn");
 function removeSubstring(str, substring) {
     if (str.endsWith(substring)) {
         return str.slice(0, str.lastIndexOf(substring));
+    }
+    else if(str.includes(substring)){
+        return str.replace(substring, "");
     } else {
         return str;
     }

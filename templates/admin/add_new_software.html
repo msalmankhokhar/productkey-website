@@ -45,9 +45,9 @@
                                 </div>
 
                                 <label for="nameInput" class="form-label">Key for {{pf.name}}</label>
-                                <input type="hidden" class="form-control" id="keyinputfor{{pf.name}}"
-                                    name="keyfor{{pf.name}}">
-                                <input id="keyinputSmallfor{{pf.name}}" type="text" class="form-control requiredInput mx-1" style="width: auto; display: inline;">
+                                <input type="hidden" class="form-control keyfor" id="keyinputfor{{pf.name}}"
+                                    name="keyfor{{pf.name}}" platform="{{pf.name}}">
+                                <input id="keyinputSmallfor{{pf.name}}" type="text" class="form-control requiredInput mx-1 keyinputSmallfor" style="width: auto; display: inline;">
                                 <button type="button" class="btn btn-primary addKeyBtn" platform="{{pf.name}}" kind="key">Add Key</button>
                                 
                                 <div id="vBoxContainer{{pf.name}}" class="vBoxContainer">
@@ -195,6 +195,8 @@
     let forInputCracks = document.querySelectorAll(".forInputCrack");
     let form = document.getElementById("form");
     let requiredInputs = document.querySelectorAll(".requiredInput");
+    let keyinputforList = document.querySelectorAll(".keyinputfor");
+    // Adding event listner for platform sliders
     platformInputs.forEach(input => {
         input.addEventListener("change", (e) => {
             if (input.checked) {
@@ -206,28 +208,31 @@
         })
     });
 
+    keyinputforList.forEach(keyInput => {
+        let platform = keyInput.getAttribute("platform");
+        keyInput.addEventListener("change", (e)=>{
+            if (keyInput.value.length > 1 && keyInput.value !== " ") {
+                document.getElementById(`keyinputSmallfor${platform}`).required = false;
+                document.getElementById(`keyinputSmallfor${platform}`).classList.remove('requiredInput');
+            }else{
+                document.getElementById(`keyinputSmallfor${platform}`).classList.add('requiredInput');
+                document.getElementById(`keyinputSmallfor${platform}`).required = true;
+            }
+        })
+
+    });
+
     forInputs.forEach(input => {
         input.addEventListener("change", (e) => {
             if (input.checked) {
                 document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "block";
                 document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).required = true;
+                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).classList.add('requiredInput');
             }
             else {
                 document.getElementById(`div-keyinputfor${input.getAttribute("platform")}`).style.display = "none";
-                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).required = true;
-            }
-        })
-    });
-
-    forInputCracks.forEach(input => {
-        input.addEventListener("change", (e) => {
-            if (input.checked) {
-                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "block";
-                // document.getElementById(`fileinputfor${input.getAttribute("platform")}`).required = true;
-            }
-            else {
-                document.getElementById(`div-fileinputfor${input.getAttribute("platform")}`).style.display = "none";
-                // document.getElementById(`fileinputfor${input.getAttribute("platform")}`).required = true;
+                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).required = false;
+                document.getElementById(`keyinputSmallfor${input.getAttribute("platform")}`).classList.remove('requiredInput');
             }
         })
     });
