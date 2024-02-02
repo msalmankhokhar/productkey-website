@@ -1,132 +1,118 @@
 <!doctype html>
     <html lang="en">
-    
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Keey.es</title>
-        <meta name="description" content="Get genuine activation keys and Cracks of popular paid games & softwares">
+        <title>Keey.es | Your Ultimate Key Database!</title>
+        <meta name="description" content="Get genuine activation keys and Cracks of popular paid games & softwares.">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="stylesheet" href="static/css/bg.css">
         <link rel="stylesheet" href="static/css/comman2.css">
         <link rel="stylesheet" href="static/css/home.css">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+      *{
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      ::selection{
+        color: #fff;
+        background: #5f0092;
+      }
+      
+      .container .searchInput{
+        background: #fff;
+        width: 100%;
+        border-radius: 5px;
+        position: relative;
+        box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+      }
+      
+      .searchInput input{
+        height: 55px;
+        width: 100%;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        padding: 0 60px 0 20px;
+        font-size: 18px;
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+      }
+      
+      .searchInput.active input{
+        border-radius: 5px 5px 0 0;
+      }
+      
+      .searchInput .resultBox{
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        max-height: 280px;
+        overflow-y: auto;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        background: #fff;
+        box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+      }
+      
+      .searchInput.active .resultBox{
+        padding: 10px 8px;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      .resultBox li{
+        list-style: none;
+        padding: 8px 12px;
+        display: none;
+        width: 100%;
+        cursor: default;
+        border-radius: 3px;
+      }
+      
+      .searchInput.active .resultBox li{
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+      }
+      .resultBox li:hover{
+        background: #efefef;
+      }
+      
+      .searchInput .icon{
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 55px;
+        width: 55px;
+        text-align: center;
+        line-height: 55px;
+        font-size: 20px;
+        color: #644bff;
+        cursor: pointer;
+      }
+        </style>   
+      <style>
+          #main{
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              row-gap: 20px;
+              padding: 20px 20px;
+          }
+          #itemThumbnail{
+              width: 64px;
+          }
+          #desc{
+              font-size: 1rem;
+              color: #545454;
+          }
+      </style>
     </head>
-    
-    <!-- <div class="container">
-      </div> -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-    *{
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    body{
-      /* background: #f4f5;
-      padding: 0 20px; */
-    }
-    
-    ::selection{
-      color: #fff;
-      background: #664AFF;
-    }
-    
-    .container .searchInput{
-      background: #fff;
-      width: 100%;
-      border-radius: 5px;
-      position: relative;
-      box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
-    }
-    
-    .searchInput input{
-      height: 55px;
-      width: 100%;
-      outline: none;
-      border: none;
-      border-radius: 5px;
-      padding: 0 60px 0 20px;
-      font-size: 18px;
-      box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
-    }
-    
-    .searchInput.active input{
-      border-radius: 5px 5px 0 0;
-    }
-    
-    .searchInput .resultBox{
-      padding: 0;
-      opacity: 0;
-      pointer-events: none;
-      max-height: 280px;
-      overflow-y: auto;
-      position: absolute;
-      z-index: 1;
-      width: 100%;
-      background: #fff;
-      box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
-    }
-    
-    .searchInput.active .resultBox{
-      padding: 10px 8px;
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    .resultBox li{
-      list-style: none;
-      padding: 8px 12px;
-      display: none;
-      width: 100%;
-      cursor: default;
-      border-radius: 3px;
-    }
-    
-    .searchInput.active .resultBox li{
-      display: flex;
-      column-gap: 10px;
-      align-items: center;
-    }
-    .resultBox li:hover{
-      background: #efefef;
-    }
-    
-    .searchInput .icon{
-      position: absolute;
-      right: 0px;
-      top: 0px;
-      height: 55px;
-      width: 55px;
-      text-align: center;
-      line-height: 55px;
-      font-size: 20px;
-      color: #644bff;
-      cursor: pointer;
-    }
-    </style>
-    
-    <style>
-        #main{
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            row-gap: 20px;
-            padding: 20px 20px;
-        }
-        #itemThumbnail{
-            width: 100px;
-        }
-        #desc{
-            font-size: 0.85rem;
-            color: #545454;
-        }
-        </style>
-    
     <body>
-    
       <div>
         <div class="wave"></div>
         <div class="wave"></div>
@@ -134,11 +120,9 @@
      </div>
     
     <div class="container" id="container">
-    
-      
       <div id="header">
         <h1 class="text-center">Keey.es</h1>
-        <p class="text-center">Online Product keys Archive</p>
+        <p class="text-center">Online Product Keys Archive</p>
       </div>
       <div id="contentWrapper">
         <img id="itemThumbnail" src="{{sw.imgSrc}}" alt="thumbnail">
@@ -149,22 +133,22 @@
         {% endif %}
         {% if available == "both" %}
         {% if item == "Game" %}
-        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong> {{default_v}} edition {{platform}}</p>
+        <p id="desc" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong>  {{platform}} {{default_v}} Edition</p>
         {% else %}
-        <p id="desc" style="font-size: 1.2rem;" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong> version {{default_v}} {{platform}}</p>
+        <p id="desc" class="text-center">Choose Key or Crack for <strong>{{sw.name}}</strong> version {{default_v}} {{platform}}</p>
         {% endif %}
-        <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+        <select class="form-select form-select-lg my-3 w-75" aria-label="Large select example">
             <option selected>Choose an option</option>
             <option class="choiceOption" myvalue="Key">Key</option>
             <option class="choiceOption" myvalue="Crack">Download Crack</option>
         </select>
-        <button id="submitBtn" class="mybtn animate__animated animate__pulse animate__infinite" style="cursor: pointer;">
-          Continue
+        <button id="submitBtn" class="mybtn animate__animated" style="cursor: pointer; padding: 12px 30px !important;">
+          Continue >
           <!-- <i style="margin-left: 30px;" class="fas fa-arrow-right" ></i> -->
         </button>
         {% else %}
-        <p id="desc" style="font-size: 1.2rem;" class="text-center">{{available}} of <strong>{{sw.name}}</strong> is available for {{platform}}</p>
-        <select class="form-select form-select-lg mb-3" aria-label="Large select example" style="display: none;">
+        <p id="desc" style="font-size: 1rem;" class="text-center">{{available}} of <strong>{{sw.name}}</strong> is available for {{platform}}</p>
+        <select class="form-select form-select-lg my-3 w-75" aria-label="Large select example" style="display: none;">
             <option>Choose an option</option>
             <option selected class="choiceOption" myvalue="{{available}}">{{available}}</option>
         </select>
@@ -177,8 +161,9 @@
         </div>
         <footer>
           <div id="footerContent">
-            <a href="/Disclaimer/index.html" class="footerLink">Disclaimer</a>
-            <a href="/Contact/index.html" class="footerLink">Contact Us</a>
+            <a href="https://keey.es/"class="footerLink">Home</a>
+            <a href="/Disclaimer/" class="footerLink">Disclaimer</a>
+            <a href="/Contact/" class="footerLink">Contact Us</a>
           </div>
           <div id="CR" class="text-center">Keey.es &copy; 2024 - All Rights Reserved</div>
         </footer> 
@@ -241,12 +226,12 @@
     toast.classList.add("toast", "show")
     toast.innerHTML = `
     <div style="display: flex; align-items: center;" class="toast-header">
-      <img src="https://image.similarpng.com/very-thumbnail/2020/08/Illustration-of-light-bulb-icon-on-transparent-background-PNG.png" class="rounded me-2" alt="icon" width="20">
-      <strong class="me-auto">Notification</strong>
+      <img src="https://i.ibb.co/7JrD6wK/notification-icon.png" class="rounded me-2" alt="icon" width="20">
+      <strong class="me-auto">New Alert!</strong>
       <small>${Math.floor(Math.random() * 15)} mins ago</small>
     </div>
     <div class="toast-body">
-      Someone generated ${msgList[Math.floor(Math.random() * msgList.length)]} for <strong>${name}</strong>
+      Someone generated a <strong>${msgList[Math.floor(Math.random() * msgList.length)]}</strong> for <strong>${name}</strong>
     </div>
     `
     // `id="toast" class="toast show" data-aos="fade-down" role="alert" aria-live="assertive" aria-atomic="true"`
@@ -255,8 +240,6 @@
       document.body.removeChild(toast);
     }, 5000);
   }
-  
-  let toastInterval = setInterval(showToast, 10000);
   </script>
     
     </html>

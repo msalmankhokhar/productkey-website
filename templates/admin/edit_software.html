@@ -1,6 +1,6 @@
 {% extends "admin/add_new_software.html" %}
 
-{% block title %}Edit Software{% endblock title %}
+{% block title %}Edit {{item}}{% endblock title %}
 
 {% block main %}
 
@@ -12,7 +12,6 @@
         </div>
         
         <div class="mb-3">
-            <label for="">Platforms available</label>
             {% for pf in all_db_platforms %}
             {% if item in pf.valid_for %}
                 <div class="form-check form-switch m-1">
