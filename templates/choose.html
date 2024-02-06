@@ -201,49 +201,51 @@
       })
     </script>
 
-<script>
-  // let suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
-  function showToast(sw_name) {
-    let name;
-    if (sw_name) {
-      name = sw_name
-    } else {
-      let index = Math.floor(Math.random() * suggestions.length);
-      name = suggestions[index];
-    }
-    
-    let software_ID = id_dict[name][0];
-    let type = id_dict[name][2];
-    let msgList = [ "Key", "Download link" ]
-    let toast = document.createElement("div");
-    
-    toast.setAttribute("id", "toast")
-    toast.setAttribute("data-aos", "fade-down")
-    toast.setAttribute("role", "alert")
-    toast.setAttribute("aria-live", "assertive")
-    toast.setAttribute("aria-atomic", true)
-   
-    toast.classList.add("toast", "show")
-    toast.innerHTML = `
-    <div style="display: flex; align-items: center;" class="toast-header">
-      <img src="https://i.ibb.co/7JrD6wK/notification-icon.png" class="rounded me-2" alt="icon" width="20">
-      <strong class="me-auto">New Alert!</strong>
-      <small>${Math.floor(Math.random() * 15)} mins ago</small>
-    </div>
-    <div class="toast-body">
-      Someone generated a <strong>${msgList[Math.floor(Math.random() * msgList.length)]}</strong> for <strong>${name}</strong>
-    </div>
-    `
-    // `id="toast" class="toast show" data-aos="fade-down" role="alert" aria-live="assertive" aria-atomic="true"`
-    document.body.appendChild(toast)
-    setTimeout(() => {
-      document.body.removeChild(toast);
-      if (toastInterval) {
-        clearInterval(toastInterval);
+    <script>
+      // let suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
+      function showToast(sw_name) {
+        let name;
+        if (sw_name) {
+          name = sw_name
+        } else {
+          let index = Math.floor(Math.random() * suggestions.length);
+          name = suggestions[index];
+        }
+        
+        let software_ID = id_dict[name][0];
+        let type = id_dict[name][2];
+        let msgList = [ "Key", "Crack File" ]
+        let toast = document.createElement("div");
+        
+        toast.setAttribute("id", "toast")
+        // toast.setAttribute("data-aos", "fade-down")
+        toast.setAttribute("role", "alert")
+        toast.setAttribute("aria-live", "assertive")
+        toast.setAttribute("aria-atomic", true)
+      
+        toast.classList.add("toast", "show")
+        toast.innerHTML = `
+        <div style="display: flex; align-items: center;" class="toast-header">
+          <img src="https://i.ibb.co/7JrD6wK/notification-icon.png" class="rounded me-2" alt="icon" width="20">
+          <strong class="me-auto">New Alert!</strong>
+          <small>${Math.floor(Math.random() * 15)} mins ago</small>
+        </div>
+        <div class="toast-body">
+          Someone generated a <strong>${msgList[Math.floor(Math.random() * msgList.length)]}</strong> for <strong>${name}</strong>
+        </div>
+        `
+        document.body.appendChild(toast)
+        console.log("toast added")
+        setTimeout(() => {
+          try {
+            document.body.removeChild(toast);           
+        } catch (error) {
+            
+        }
+        }, 5000);
       }
-      setInterval(showToast, 15000);
-    }, 5000);
-  }
-  </script>
+    
+      let toastInterval = setInterval(showToast, 10000);
+      </script>
     
     </html>

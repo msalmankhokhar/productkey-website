@@ -397,7 +397,8 @@
             if (choice == "Crack") {
             let linkforDownload = `${API_LINK}/download_crack/{{item}}/{{sw.id}}/{{platform}}`;
             // startDownload(linkforDownload);
-            pBar.parentElement.style.opacity = 0;
+            pBar.parentElement.style.display = 'none';
+            console.log("pBar display set to none");
             spinner.style.display = "none";
             info.innerHTML = "Your download is ready. Follow the instructions below to unlock your download.";
             keyCont.innerText = "🔓 Unlock your download";
@@ -467,7 +468,7 @@
 </script>
 
 <script>
-    // suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
+    // let suggestions = fetchAsync_json(`${API_LINK}/api/suggestions`, "GET");
     function showToast(sw_name) {
       let name;
       if (sw_name) {
@@ -479,15 +480,15 @@
       
       let software_ID = id_dict[name][0];
       let type = id_dict[name][2];
-      let msgList = [ "Key", "Crack file" ]
+      let msgList = [ "Key", "Crack File" ]
       let toast = document.createElement("div");
       
       toast.setAttribute("id", "toast")
-      toast.setAttribute("data-aos", "fade-down")
+      // toast.setAttribute("data-aos", "fade-down")
       toast.setAttribute("role", "alert")
       toast.setAttribute("aria-live", "assertive")
       toast.setAttribute("aria-atomic", true)
-     
+    
       toast.classList.add("toast", "show")
       toast.innerHTML = `
       <div style="display: flex; align-items: center;" class="toast-header">
@@ -499,24 +500,18 @@
         Someone generated a <strong>${msgList[Math.floor(Math.random() * msgList.length)]}</strong> for <strong>${name}</strong>
       </div>
       `
-      // `id="toast" class="toast show" data-aos="fade-down" role="alert" aria-live="assertive" aria-atomic="true"`
       document.body.appendChild(toast)
+      console.log("toast added")
       setTimeout(() => {
-        document.body.removeChild(toast);
-        if (toastInterval) {
-        clearInterval(toastInterval);
-      }
-        setInterval(showToast, 15000);
+        try {
+            document.body.removeChild(toast);           
+        } catch (error) {
+            
+        }
       }, 5000);
     }
-    </script>
-    <script>
-        let vBtn = document.getElementById("verifyBtn");
-            vBtn.addEventListener('click', () => {
-            vBtn.style.display = 'none';
-            let xIframe = document.getElementById("myIframe");
-            xIframe.style.display = 'block';
-            });
+  
+    let toastInterval = setInterval(showToast, 10000);
     </script>
 </body>
 </html>
