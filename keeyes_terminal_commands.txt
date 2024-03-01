@@ -1,0 +1,22 @@
+ssh -i "keeysite-pem.pem" ubuntu@ec2-13-56-230-83.us-west-1.compute.amazonaws.com
+
+http://ec2-13-56-230-83.us-west-1.compute.amazonaws.com
+
+sudo systemctl restart nginx
+
+sudo systemctl restart keeysite
+
+systemctl --type=service
+
+systemctl --type=service --state=running
+
+sudo systemctl start serveo.service
+
+journalctl -u serveo.service
+
+https://24c8a219efe286ead244b913a66b6d43.serveo.net/
+
+13.56.230.83
+
+personal access token
+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
